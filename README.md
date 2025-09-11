@@ -36,7 +36,7 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 
 - **Suposições:**  
   - Os usuários terão **acesso à internet** para utilizar o sistema.  
-  - O banco de dados padrão será o **MySQL Server**, acessado pelo **MySQL Workbench**.  
+  - O banco de dados padrão será o **PostgreSQL**, acessado pelo **pgAdmin 4** ou linha de comando `psql`.  
   - O ambiente de testes terá **acesso ao GitHub** para deploy/hospedagem.  
   - Estudantes possuem **e-mail institucional** para cadastro e autenticação.  
   - Será possível usar dispositivos pessoais ou laboratórios da universidade para rodar o sistema.  
@@ -65,7 +65,7 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 1) Usuário faz login  
 2) Usuário acessa a lista de itens disponíveis  
 3) Usuário (doador) clica em "Cadastrar item" e preenche os dados  
-4) Usuário salva o item e o sistema registra no banco (MySQL)  
+4) Usuário salva o item e o sistema registra no banco (**PostgreSQL**)  
 5) Item aparece automaticamente na lista de desapegos  
 6) Outro usuário (receptor) pesquisa e visualiza o item  
 7) Usuário (receptor) manifesta interesse no item  
@@ -103,7 +103,7 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 8.3 Back-end (API/servidor)  
 - **Framework:** Spring Boot (Java).  
-- **Banco de dados:** MySQL Server (Workbench). 
+- **Banco de dados:** **PostgreSQL (pgAdmin 4 / psql)**  
 - **Hospedagem:** Deploy acadêmico (GitHub ou servidor local).  
 
 
