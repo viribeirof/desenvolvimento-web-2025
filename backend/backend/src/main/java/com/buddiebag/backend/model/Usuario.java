@@ -18,13 +18,17 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "senha_hash")
     private String senhaHash;
 
     private Integer papel; // 0=usuário, 1=admin
+    @Column(name = "foto_perfil")
     private String fotoPerfil;
 
+    @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
+
+    @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
     @PrePersist
