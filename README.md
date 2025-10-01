@@ -141,4 +141,42 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 9.3 Relações entre entidades  
 - Um **Usuário** tem muitos **Itens** (1→N).  
-- Um **Item** pertence a um **Usuário** (N→1).  
+- Um **Item** pertence a um **Usuário** (N→1).
+
+## 10) Como rodar o projeto
+
+### 10.1 Back-end (Spring Boot)
+
+1. Clone o repositório:
+
+```bash
+git clone <URL_DO_REPOSITORIO>
+cd backend
+```
+
+2. Configure o banco PostgreSQL:
+- Executar Query Buddie Bag
+
+3. Configure as variáveis de ambiente
+- No sistema, as variáveis de ambiente utilizadas são:
+  - ${URL_BD}: url do banco de dados;
+  - ${USER_BD}: nome de usuário no banco de dados;
+  - ${SENHA_BD}: senha do banco de dados.
+- Essas variáveis estão presentes no arquivo "application.properties".
+- A configuração dessas variáveis é feita dentro da IDE nas configurações da aplicação.
+
+## 11) Endpoints da API
+
+| Método | Rota                   | Body (JSON) | Resposta (HTTP + Exemplo) |
+|--------|------------------------|-------------|---------------------------|
+| GET    | /api/usuarios          | -           | 200 OK <br> `[{<"id":1,"nome":"Maria Silva","email":"maria@email.com","fotoPerfil":"maria.png"}]` |
+| GET    | /api/usuarios/{id}     | -           | 200 OK <br> `{"id":1,"nome":"Maria Silva","email":"maria@email.com","fotoPerfil":"maria.png"}` <br> 404 Not Found |
+| POST   | /api/usuarios          | `{"nome":"Ana Souza","email":"ana@email.com","senhaHash":"12345678","fotoPerfil":"ana.png"}` | 201 Created <br> `{"message":"Usuário criado com sucesso!","id":3}`<br> <br> 500 Internal Server Error (email duplicado) <br> `{"message":"Item excluído com sucesso!"}` |
+| PUT    | /api/usuarios/{id}     | `{"nome":"Ana Souza","email":"ana@email.com","senhaHash":"nova123","fotoPerfil":"ana.png"}` | 200 OK <br> `{"message":"Usuário atualizado com sucesso!"}` <br> 404 Not Found <br>  |
+| DELETE | /api/usuarios/{id}     | -           | 200 OK <br> `{"message":"Usuário excluído com sucesso!"}`<br> <br> 404 Not Found |
+| GET    | /api/itens             | -           | 200 OK <br> `[{"id":10,"nome":"Cafeteira elétrica","descricao":"Funciona bem, usada poucas vezes","status":"disponível","fotoItem":"cafeteira.png","usuarioId":1}]` |
+| POST   | /api/itens             | `{"nome":"Cafeteira elétrica","descricao":"Funciona bem, usada poucas vezes","usuarioId":1,"fotoItem":"cafeteira.png"}` | 201 Created <br> `{"message":"Item criado com sucesso!","id":10}` |
+| PUT    | /api/itens/{id}        | `{"nome":"Cafeteira nova","descricao":"Usada 1 vez","status":"disponível","fotoItem":"cafeteira_nova.png"}` | 200 OK <br> `{"message":"Item atualizado com sucesso!"}` <br> 404 Not Found |
+| DELETE | /api/itens/{id}        | -           | 200 OK <br> `{"message":"Item excluído com sucesso!"}` <br> 404 Not Found |
+
+
