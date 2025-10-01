@@ -10,6 +10,7 @@ public class UsuarioMapper {
         dto.setId(usuario.getId());
         dto.setNome(usuario.getNome());
         dto.setEmail(usuario.getEmail());
+        dto.setFotoPerfil(usuario.getFotoPerfil());
         return dto;
     }
 }

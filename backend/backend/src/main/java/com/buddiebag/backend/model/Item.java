@@ -41,12 +41,16 @@ public class Item {
     public void aoCriar() {
         this.dataCriacao = LocalDateTime.now();
         this.dataAtualizacao = LocalDateTime.now();
+
+        if (this.status == null) {
+            this.status = Status.DISPONIVEL;
+        }
+
     }
 
     @PreUpdate
     public void aoAtualizar() {
         this.dataAtualizacao = LocalDateTime.now();
-
     }
 
 }

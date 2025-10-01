@@ -62,12 +62,10 @@ public class ItemService {
         return itemRepository.save(itemExistente);
     }
 
-    // Deletar item
     public void deletarItem(Long id) {
         itemRepository.deleteById(id);
     }
 
-    // Listar itens de um usuário específico
     public List<Item> listarPorUsuario(Long usuarioId) {
         return itemRepository.findByUsuarioId(usuarioId);
     }

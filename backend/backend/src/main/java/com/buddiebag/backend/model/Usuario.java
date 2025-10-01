@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +28,8 @@ public class Usuario {
     @Column(nullable = false, name = "senha_hash")
     private String senhaHash;
 
-    private Integer papel; // 0=usuário, 1=admin
+    private Integer papel = 0;
+
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 
@@ -36,10 +39,17 @@ public class Usuario {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> itens = new ArrayList<>();
+
     @PrePersist
     public void aoCriar() {
         this.dataCriacao = LocalDateTime.now();
         this.dataAtualizacao = LocalDateTime.now();
+
+        if (this.papel == null || this.papel != 0) {
+            this.papel = 0;
+        }
     }
 
     @PreUpdate
