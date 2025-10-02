@@ -155,7 +155,11 @@ cd backend
 ```
 
 2. Configure o banco PostgreSQL:
-- Executar Query Buddie Bag
+1. Abra o terminal do PostgreSQL (`psql`) ou pgAdmin.
+2. Execute o script `buddiebag.sql`:
+```bash
+psql -U seu_usuario -f db/buddiebag.sql
+````
 
 3. Configure as variáveis de ambiente
 - No sistema, as variáveis de ambiente utilizadas são:
