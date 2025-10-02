@@ -1,7 +1,7 @@
 const Perfil = () => {
     const nome = "Vitória Ribeiro";
     const imgUrl = "https://www.freeiconspng.com/uploads/profile-icon-9.png";
-    const descricao = "Desenvolvedora. Apaixonada por Spring.";
+    const descricao = "Desenvolvedora. Apaixonada por React";
     return (
         <div>
             <h1>{nome}</h1>
@@ -11,4 +11,3 @@ const Perfil = () => {
     )
 }
 export default Perfil
-int

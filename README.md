@@ -147,29 +147,60 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 10.1 Back-end (Spring Boot)
 
-1. Clone o repositório:
-
+#### 1. Clone o repositório
 ```bash
-git clone <URL_DO_REPOSITORIO>
-cd backend
+git clone https://github.com/viribeirof/desenvolvimento-web-2025.git
+cd desenvolvimento-web-2025/backend
 ```
 
-2. Configure o banco PostgreSQL:
-1. Abra o terminal do PostgreSQL (`psql`) ou pgAdmin.
-2. Execute o script `buddiebag.sql`:
+#### 2. Configure o banco PostgreSQL
+- Abra o terminal do PostgreSQL (`psql`) ou use o pgAdmin.
+- Execute o script `buddiebag.sql` para criar as tabelas:
+
+#### Exemplo no Linux/macOS/Windows (ajuste conforme seu usuário e banco):
 ```bash
-psql -U seu_usuario -f db/buddiebag.sql
-````
+psql -U seu_usuario -d nome_do_banco -h localhost -f db/buddiebag.sql
+```
 
-3. Configure as variáveis de ambiente
-- No sistema, as variáveis de ambiente utilizadas são:
-  - ${URL_BD}: url do banco de dados;
-  - ${USER_BD}: nome de usuário no banco de dados;
-  - ${SENHA_BD}: senha do banco de dados.
-- Essas variáveis estão presentes no arquivo "application.properties".
-- A configuração dessas variáveis é feita dentro da IDE nas configurações da aplicação.
+#### 3. Configure as variáveis de ambiente
+As variáveis de ambiente utilizadas estão no arquivo `application.properties`:
+- `${URL_BD}` → URL do banco de dados;
+- `${USER_BD}` → nome de usuário no banco de dados;
+- `${SENHA_BD}` → senha do banco de dados.
 
-## 11) Endpoints da API
+#### Linux/macOS
+```bash
+export URL_BD=jdbc:postgresql://localhost:5432/nome_do_banco
+export USER_BD=seu_usuario
+export SENHA_BD=sua_senha
+```
+
+#### Windows (PowerShell)
+```powershell
+setx URL_BD "jdbc:postgresql://localhost:5432/nome_do_banco"
+setx USER_BD "seu_usuario"
+setx SENHA_BD "sua_senha"
+```
+
+- Você também pode configurar essas variáveis diretamente pela **IDE** (ex: IntelliJ → Run Configurations).
+
+#### 4. Rode o projeto
+No terminal, use o wrapper do Maven:
+
+#### Linux/macOS
+```bash
+./mvnw spring-boot:run
+```
+
+#### Windows
+```bash
+mvnw spring-boot:run
+```
+
+Ou, se estiver usando **IntelliJ IDEA**, basta clicar no botão **▶ Play** no canto superior direito para rodar o projeto.
+
+
+### 11) Endpoints da API
 
 | Método | Rota                   | Body (JSON) | Resposta (HTTP + Exemplo) |
 |--------|------------------------|-------------|---------------------------|
