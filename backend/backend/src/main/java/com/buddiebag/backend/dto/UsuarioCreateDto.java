@@ -18,7 +18,7 @@ public class UsuarioCreateDto {
 
     @NotBlank(message = "A senha é obrigatória")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
-    private String senha;
+    private String senhaHash;
 
     private String fotoPerfil;
 }

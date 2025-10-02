@@ -1,5 +1,6 @@
 package com.buddiebag.backend.controlller;
 
+import com.buddiebag.backend.dto.UsuarioCreateDto;
 import com.buddiebag.backend.dto.UsuarioDto;
 import com.buddiebag.backend.dto.UsuarioUpdateDto;
 import com.buddiebag.backend.mapper.UsuarioMapper;
@@ -33,15 +34,15 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> criar(@RequestBody Usuario usuario) {
-        usuarioService.criarUsuario(usuario);
+    public ResponseEntity<Object> criar(@Valid @RequestBody UsuarioCreateDto dto) {
+        usuarioService.criarUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Usuário criado com sucesso!"));    }
+                .body(Map.of("message", "Usuário criado com sucesso!"));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> buscarPorId(@PathVariable Long id) {
-        Usuario usuario = usuarioService.buscarPorId(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toDto(usuario));
     }
 
@@ -62,10 +63,7 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable Long id) {
-        boolean deletado = usuarioService.deletarUsuario(id);
-        if (!deletado) {
-            throw new EntityNotFoundException("Usuário não encontrado ou não pode ser deletado");
-        }
+        usuarioService.deletarUsuario(id);
         return ResponseEntity.ok(Map.of("message", "Usuário deletado com sucesso!"));
     }
 
