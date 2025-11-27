@@ -22,3 +22,34 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Java / Maven/Gradle
+/target/
+/build/
+/out/
+
+# Node
+node_modules/
+
+# Uploads e arquivos gerados
+/backend/backend/uploads/
+/uploads/
+/*.zip
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+
+# Arquivos sensíveis
+.env
+application-*.properties
+
+# OS
+.DS_Store
+thumbs.db
+

@@ -20,4 +20,5 @@ public class UsuarioUpdateDto {
     private String senha;
 
     private String fotoPerfil;
+    private String fotoPerfilContentType;
 }

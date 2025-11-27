@@ -1,6 +1,5 @@
 package com.buddiebag.backend.dto;
 
-// Se estiver usando Lombok para getters/setters
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,7 +17,11 @@ public class UsuarioCreateDto {
 
     @NotBlank(message = "A senha é obrigatória")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
-    private String senhaHash;
+    private String senha;
 
     private String fotoPerfil;
+    private String fotoPerfilContentType;
+
+    private Integer papel;
+
 }

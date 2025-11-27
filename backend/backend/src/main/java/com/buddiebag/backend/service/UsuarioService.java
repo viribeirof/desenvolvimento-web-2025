@@ -5,45 +5,89 @@ import com.buddiebag.backend.dto.UsuarioDto;
 import com.buddiebag.backend.dto.UsuarioUpdateDto;
 import com.buddiebag.backend.exceptions.EmailJaExisteException;
 import com.buddiebag.backend.mapper.UsuarioMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.buddiebag.backend.model.Usuario;
 import com.buddiebag.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService;
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                          PasswordEncoder passwordEncoder,
+                          FileStorageService fileStorageService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.fileStorageService = fileStorageService;
     }
 
-    public Page<UsuarioDto> listarTodos(Pageable pageable) {
-        return usuarioRepository.findAll(pageable)
-                .map(UsuarioMapper::toDto);
+    public List<UsuarioDto> listar() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(UsuarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
+    public String gerarETag(Page<UsuarioDto> page) throws JsonProcessingException {
+        String json = new ObjectMapper().writeValueAsString(page.getContent());
+        String hash = Integer.toHexString(json.hashCode());
+        return hash.replace("\"", "");
+    }
+
+    @Transactional
     public void criarUsuario(UsuarioCreateDto dto) {
-        if (usuarioRepository.existsByEmail(dto.getEmail())) {
+        String email = dto.getEmail() != null ? dto.getEmail().trim().toLowerCase() : null;
+        String senha = dto.getSenha();
+
+        if (!StringUtils.hasText(email)) {
+            throw new IllegalArgumentException("Email é obrigatório");
+        }
+        if (usuarioRepository.existsByEmail(email)) {
             throw new EmailJaExisteException("Email já cadastrado");
         }
 
-        if (dto.getSenhaHash() == null || dto.getSenhaHash().isBlank()) {
+        if (!StringUtils.hasText(senha)) {
             throw new IllegalArgumentException("Senha é obrigatória");
+        }
+        if (senha.length() < 6) {
+            throw new IllegalArgumentException("Senha deve ter pelo menos 8 caracteres");
         }
 
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setSenhaHash(passwordEncoder.encode(dto.getSenhaHash()));
-        usuario.setFotoPerfil(dto.getFotoPerfil());
+        usuario.setEmail(email);
+        usuario.setSenhaHash(passwordEncoder.encode(senha));
+
+        if (dto.getPapel() != null) {
+            usuario.setPapel(dto.getPapel());
+        }
+
+        if (dto.getFotoPerfil() != null && !dto.getFotoPerfil().isBlank()) {
+            String filename = fileStorageService.storeBase64AsFile(dto.getFotoPerfil(), dto.getFotoPerfilContentType());
+            String url = fileStorageService.getFileUrl(filename);
+            usuario.setFotoPerfil(url);
+            usuario.setFotoPerfilContentType(dto.getFotoPerfilContentType());
+        } else {
+            usuario.setFotoPerfil(null);
+            usuario.setFotoPerfilContentType(null);
+        }
 
         usuarioRepository.save(usuario);
     }
@@ -68,17 +112,37 @@ public class UsuarioService {
             usuario.setSenhaHash(passwordEncoder.encode(dto.getSenha()));
         }
 
-        usuario.setFotoPerfil(dto.getFotoPerfil());
+        if (dto.getFotoPerfil() != null && !dto.getFotoPerfil().isBlank()) {
+            String oldUrl = usuario.getFotoPerfil();
+            if (oldUrl != null && !oldUrl.isBlank()) {
+                try {
+                    fileStorageService.deleteByUrl(oldUrl);
+                } catch (Exception ignored) {
+                }
+            }
+
+            String filename = fileStorageService.storeBase64AsFile(dto.getFotoPerfil(), dto.getFotoPerfilContentType());
+            String newUrl = fileStorageService.getFileUrl(filename);
+            usuario.setFotoPerfil(newUrl);
+            usuario.setFotoPerfilContentType(dto.getFotoPerfilContentType());
+        }
 
         usuarioRepository.save(usuario);
         return true;
     }
 
-
     public void deletarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + id + " não encontrado"));
+
+        String url = usuario.getFotoPerfil();
+        if (url != null && !url.isBlank()) {
+            try {
+                fileStorageService.deleteByUrl(url);
+            } catch (Exception ignored) {
+            }
+        }
+
         usuarioRepository.delete(usuario);
     }
-
 }

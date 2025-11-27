@@ -1,5 +1,6 @@
 package com.buddiebag.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +31,11 @@ public class Usuario {
 
     private Integer papel = 0;
 
-    @Column(name = "foto_perfil")
+    @Column(name = "foto_perfil", columnDefinition = "TEXT")
     private String fotoPerfil;
+
+    @Column(name = "foto_perfil_content_type")
+    private String fotoPerfilContentType;
 
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
@@ -39,6 +43,7 @@ public class Usuario {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itens = new ArrayList<>();
 

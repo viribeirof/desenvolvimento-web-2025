@@ -33,6 +33,10 @@ public class Item {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataAtualizacao;
 
+    @Column(name = "foto_item_content_type")
+    private String fotoItemContentType;
+
+
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
