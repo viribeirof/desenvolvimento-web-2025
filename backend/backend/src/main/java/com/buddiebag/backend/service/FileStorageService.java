@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -16,7 +17,6 @@ public class FileStorageService {
     private final Path uploadDir;
     private final String baseUrl;
 
-    // construtor recebe app.upload.dir e app.base-url
     public FileStorageService(
             @Value("${app.upload.dir:${user.home}/uploads}") String uploadDir,
             @Value("${app.base-url:http://localhost:8080}") String baseUrl) {
@@ -38,7 +38,7 @@ public class FileStorageService {
     public String store(MultipartFile file) {
         if (file == null || file.isEmpty()) throw new IllegalArgumentException("Arquivo vazio");
 
-        String original = StringUtils.cleanPath(file.getOriginalFilename());
+        String original = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String ext = "";
         int i = original.lastIndexOf('.');
         if (i >= 0) ext = original.substring(i);

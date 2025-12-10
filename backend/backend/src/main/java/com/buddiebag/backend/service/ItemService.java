@@ -135,8 +135,4 @@ public class ItemService {
         return itens.stream().map(ItemMapper::toDto).toList();
     }
 
-    public Page<Item> buscarPorNome(String nome, int pagina, int tamanho) {
-        Pageable pageable = PageRequest.of(pagina, tamanho);
-        return itemRepository.findByNomeContainingIgnoreCase(nome, pageable);
-    }
 }

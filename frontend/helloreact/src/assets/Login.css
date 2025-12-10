@@ -1,0 +1,397 @@
+/* src/pages/Login.css */
+html, body {
+  background-color: #0b1220 !important; /* mesma cor da sua lux-bg */
+  min-height: 100vh;
+  color: aliceblue !important;
+}
+
+/* Body / container */
+.lux-bg {
+  min-height: 100vh;
+  width: 100%;
+  padding: 1rem;
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255, 255, 255, 0.04), transparent),
+    radial-gradient(900px 400px at 90% 80%, rgba(255, 255, 255, 0.03), transparent),
+    linear-gradient(180deg, #0f1724 0%, #0b1220 100%);
+  color: #e9eef8;
+  position: relative;
+  overflow: hidden;
+}
+
+/* wrapper central */
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+/* brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  user-select: none;
+}
+
+.brand-logo {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  color: #d8e7ff;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+
+.glass-card-login {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+  border-radius: 14px;
+  backdrop-filter: blur(8px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.7);
+  transition: transform 0.28s cubic-bezier(.2, .9, .2, 1), box-shadow 0.28s;
+  transform-origin: center;
+}
+
+/* hover levitation */
+.glass-card-login:hover {
+  transform: translateY(-6px) scale(1.003);
+  box-shadow: 0 20px 50px rgba(2, 6, 23, 0.75);
+}
+
+/* inputs */
+.fancy-input {
+  background: transparent;
+  color: #e9eef8;
+  border-radius: 10px;
+  padding: 1.25rem 0.9rem 0.5rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color .18s, box-shadow .18s, transform .15s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.01);
+}
+
+/* bootstrap floating label needs .form-floating .form-control:focus + label etc */
+/* customize label */
+.form-floating>label {
+  color: rgba(233, 238, 248, 0.7) !important;
+  transform: translateY(0.15rem);
+  transition: transform .18s, color .18s, font-size .18s;
+}
+
+/* on focus, floating label move up (bootstrap handles translate) */
+.form-floating .form-control:focus {
+  border-color: rgba(253, 254, 255, 0.7) !important;
+  box-shadow: 0 6px 20px rgba(79, 108, 148, 0.08);
+  outline: none;
+}
+
+/* input placeholder hidden to show the label */
+.form-control::placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
+/* button primary - glow */
+.btn-glow {
+  background: linear-gradient(90deg, #3b82f6 0%, #7c5cff 100%);
+  border: none !important;
+  padding-inline: 15px;
+  box-shadow: 0 6px 20px rgba(124, 92, 255, 0.22), 0 2px 6px rgba(59, 130, 246, 0.08);
+  transition: transform .16s, box-shadow .16s, filter .16s;
+  color: white;
+  border-radius: 12px;
+}
+
+.btn-exit {
+  background: linear-gradient(90deg, #12284b 0%, #09002d 100%);
+  border: none;
+  box-shadow: 0 6px 20px #08022038, 0 2px 6px rgba(6, 17, 33, 0.08);
+  transition: transform .16s, box-shadow .16s, filter .16s;
+  color: white !important;
+  border-radius: 12px !important;
+}
+
+.btn-exit:hover {
+  background: linear-gradient(90deg, #12284b 0%, #09002d 100%);
+  border: none;
+  box-shadow: 0 6px 20px rgba(8, 2, 32, 0.22), 0 2px 6px rgba(6, 17, 33, 0.08);
+  transition: transform .16s, box-shadow .16s, filter .16s;
+  color: white;
+  border-radius: 12px;
+}
+
+.btn-glow:hover:not(:disabled) {
+  transform: translateY(-3px);
+  filter: brightness(1.03);
+  box-shadow: 0 18px 48px rgba(124, 92, 255, 0.20);
+}
+
+/* outline-light button */
+.btn-outline-light {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(233, 238, 248, 0.9);
+  transition: transform .12s, background .12s;
+}
+
+.btn-outline-light:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* muted small text */
+.muted {
+  color: rgba(233, 238, 248, 0.65);
+}
+
+.link-plain {
+  color: rgba(233, 238, 248, 0.85);
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.link-plain:hover {
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+/* footer */
+.card-footer {
+  width: 100%;
+  max-width: 420px;
+  color: rgba(233, 238, 248, 0.45);
+  font-size: 0.82rem;
+}
+
+/* background decorative dots */
+.bg-decor {
+  position: fixed;
+  /* necessário para que os dots fiquem relativos ao container */
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bg-decor .dot {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  filter: blur(36px);
+  opacity: 0.18;
+  transform: translateZ(0);
+}
+
+.bg-decor .dot-1 {
+  width: 360px;
+  height: 360px;
+  left: -120px;
+  top: -80px;
+  background: radial-gradient(circle at 30% 30%, rgba(124, 92, 255, 0.9), rgba(59, 130, 246, 0.4));
+}
+
+.bg-decor .dot-2 {
+  width: 260px;
+  height: 260px;
+  right: -80px;
+  bottom: -60px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 115, 115, 0.75), rgba(255, 183, 77, 0.2));
+}
+
+.bg-decor .dot-3 {
+  width: 180px;
+  height: 180px;
+  left: 30%;
+  bottom: -100px;
+  background: radial-gradient(circle at 60% 60%, rgba(56, 189, 248, 0.75), rgba(34, 197, 94, 0.12));
+}
+
+/* responsive tweaks */
+@media (max-width: 576px) {
+  .brand-title {
+    display: none;
+  }
+
+  .login-wrap {
+    width: "100%";
+  }
+
+  .glass-card {
+    width: 100;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* small accessibility focus ring for keyboard users */
+.fancy-input:focus {
+  box-shadow: 0 6px 20px rgba(79, 108, 148, 0.07), 0 0 0 4px rgba(124, 92, 255, 0.06);
+  border-color: rgba(124, 92, 255, 0.7);
+  outline: none;
+  color: #e9eef8 !important;
+  background-color: #0b1220;
+}
+
+.logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  /* opcional: deixa branco no tema escuro */
+}
+
+
+
+/* ===== Complemento para CriarUsuario (anexar ao Login.css) ===== */
+
+/* expande o login-wrap para telas de cadastro maiores */
+.login-wrap {
+  max-width: 920px;
+  /* aumenta o limite para telas de cadastro quando este css for usado */
+}
+
+/* garante que .glass-card fique confortável em formulários maiores */
+
+/* avatar placeholder */
+.brand-logo-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+  color: rgba(233, 238, 248, 0.95);
+}
+
+/* upload area (arrastar / clicar) */
+.upload-box {
+  display: inline-block;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.01);
+  padding: 12px 16px;
+  transition: transform .14s, box-shadow .14s, border-color .14s;
+  color: rgba(233, 238, 248, 0.9);
+}
+
+.upload-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.6);
+  border-color: rgba(212, 175, 55, 0.12);
+}
+
+.upload-inner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.upload-icon {
+  font-size: 20px;
+}
+
+.upload-text {
+  color: rgba(233, 238, 248, 0.75);
+  font-weight: 500;
+}
+
+/* mantém inputs escuros e consistentes */
+.form-control.fancy-input {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: #e9eef8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 10px;
+}
+
+/* botão secundário estilizado para combinar */
+.btn-outline-light {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(233, 238, 248, 0.95);
+  padding: 10px 14px;
+  transition: transform .12s, background .12s;
+}
+
+.btn-outline-light:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* pequenas adaptações responsivas */
+@media (max-width: 992px) {
+  .login-wrap {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-wrap {
+    max-width: 380px;
+  }
+
+  .glass-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+}
+
+/* remove vazamentos brancos das laterais ao usar Container (garante fluid) */
+.lux-bg.container-fluid,
+.lux-bg {
+  width: 100%;
+}
+
+/* sutil inset escuro nas bordas do card para "recuar" visual */
+.glass-card {
+  box-shadow: 0 18px 50px rgba(2, 6, 23, 0.65), inset 0 -6px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ajusta a footer para centralizar com nova largura */
+.card-footer {
+  max-width: 920px;
+  margin: 16px auto 0;
+}
+
+/* Telas pequenas */
+@media (max-width: 576px) {
+  .lux-bg {
+    padding: 10px;
+    /* menos padding em mobile */
+  }
+
+}
+
+/* Telas médias e grandes */
+@media (min-width: 992px) {
+  .lux-bg {
+    padding: 2rem;
+    /* mais padding em telas grandes */
+  }
+}

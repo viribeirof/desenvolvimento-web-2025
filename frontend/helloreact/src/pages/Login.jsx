@@ -1,8 +1,9 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext.jsx";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { login as loginService } from "../api/AuthService.jsx";
+import "../assets/Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,122 +14,142 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
 
- const handleLogin = async (e) => {
-  e.preventDefault();
-  setErro("");
-  setLoading(true);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
 
-  try {
-    const data = await loginService(email.trim(), senha);
-
-    const token = data.accessToken || data.token || data.access_token;
-    if (!token) {
-      setErro("Resposta do servidor não contém accessToken.");
-      setLoading(false);
-      return;
-    }
-
-    const authData = {
-      accessToken: token,
-      refreshToken: data.refreshToken || data.refresh_token, 
-    };
-
-    sessionStorage.setItem('authData', JSON.stringify(authData)); 
-    
     try {
-      const decoded = jwtDecode(token);
-      setUser(decoded);
+      const data = await loginService(email.trim(), senha);
+
+      const token = data.accessToken || data.token || data.access_token;
+      if (!token) {
+        setErro("Resposta do servidor não contém accessToken.");
+        setLoading(false);
+        return;
+      }
+
+      sessionStorage.setItem("authData", JSON.stringify({
+        accessToken: token,
+        refreshToken: data.refreshToken || data.refresh_token,
+      }));
+
+      try {
+        setUser(jwtDecode(token));
+      } catch (err) {
+        console.error("Erro ao decodificar token:", err);
+        setUser(null);
+      }
+
+      setLoading(false);
+      navigate("/item");
     } catch (err) {
-      console.error("Erro ao decodificar token:", err);
-      setUser(null);
+      console.error("Login error:", err);
+
+      let message = err.message || "Erro de rede. Tente novamente.";
+
+      if (err.message === "Failed to fetch") {
+        message = "Não foi possível conectar ao servidor. Verifique sua internet.";
+      }
+
+      setErro(message);
+      setLoading(false);
     }
-    
-    setLoading(false);
-    navigate("/item"); 
-  } catch (err) {
-    console.error("Login error:", err);
-    setErro(err.message || "Erro de rede. Tente novamente.");
-    setLoading(false);
-  }
-};
+
+
+
+  };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <h2>Login</h2>
+    <div className="lux-bg d-flex align-items-center justify-content-center text-light">
+      <div className="login-wrap">
+        <div className="brand">
+          <div className="brand-logo" aria-hidden="true">
+            <img
+              src="/shopping-bag.png"
+              alt=""
+              className="logo-img"
+            />
+          </div>
+          <h1 className="brand-title">BuddieBag</h1>
+        </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={styles.input}
-        />
+        <form className="glass-card-login p-4" onSubmit={handleLogin} aria-label="Formulário de login">
+          <h2 className="mb-3">Bem-vindo!</h2>
+          <p className="muted mb-3">Insira suas credenciais para acessar o painel.</p>
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          required
-          style={styles.input}
-        />
+          <div className="form-floating mb-3">
+            <input
+              id="email"
+              type="email"
+              className="form-control fancy-input"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              aria-required="true"
+              aria-label="Email"
+            />
+            <label htmlFor="email">Email</label>
+          </div>
 
-        {erro && <p style={styles.error}>{erro}</p>}
+          <div className="form-floating mb-2">
+            <input
+              id="senha"
+              type="password"
+              className="form-control fancy-input"
+              placeholder="Senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+              aria-required="true"
+              aria-label="Senha"
+            />
+            <label htmlFor="senha">Senha</label>
+          </div>
 
-        <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
+          {erro && (
+            <div className="alert alert-danger my-2 py-2" role="alert" aria-live="polite">
+              {erro}
+            </div>
+          )}
 
-          <button style={styles.button} disabled={loading}  onClick={() => navigate("/usuario/criar")}>
-          "Cadastrar"
-        </button>
-      </form>
+          <div className="d-grid gap-2 mt-2">
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-glow"
+              disabled={loading}
+              aria-disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                  <span className="ms-2">Entrando...</span>
+                </>
+              ) : (
+                "Entrar"
+              )}
+            </button>
+          </div>
+
+          <div className="small muted mt-3 d-flex justify-content-between align-items-center">
+            <span className="muted">Ainda não tem conta? </span>
+            <button className="link-plain ps-1" type="button" onClick={() => navigate("/usuario/criar")}>Criar</button>
+          </div>
+        </form>
+
+        <div className="card-footer muted text-center mt-3">
+          <small>© {new Date().getFullYear()} BuddieBag. Todos os direitos.</small>
+        </div>
+      </div>
+
+      <div className="bg-decor">
+        <span className="dot dot-1" />
+        <span className="dot dot-2" />
+        <span className="dot dot-3" />
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#fff",
-    padding: "1rem",
-  },
-  form: {
-    backgroundColor: "#f2f2f2ff",
-    padding: "2rem",
-    borderRadius: "8px",
-    width: "100%",
-    maxWidth: "360px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    boxShadow: "0 10px 10px rgba(0,0,0,0.08)",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ddd",
-    fontSize: "1rem",
-  },
-  button: {
-    padding: "10px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "1rem",
-  },
-  error: {
-    color: "crimson",
-    fontSize: "0.9rem",
-    margin: 0,
-  },
 };
 
 export default Login;

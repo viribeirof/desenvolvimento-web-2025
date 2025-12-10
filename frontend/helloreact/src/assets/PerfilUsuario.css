@@ -1,0 +1,224 @@
+/* PerfilUsuario.css — UI loja profissional */
+
+/* --- helpers / variables (reinforce theme) --- */
+:root {
+  --p-bg-1: #0b1220;
+  --p-bg-2: #0f1724;
+  --p-foreground: #e9eef8;
+  --p-muted: rgba(233,238,248,0.62);
+  --p-border: rgba(255,255,255,0.04);
+  --p-glass: rgba(255,255,255,0.02);
+  --accent-primary: linear-gradient(90deg, #3b82f6 0%, #7c5cff 100%);
+  --accent-gold-1: #d4af37;
+  --accent-gold-2: #a37e1f;
+}
+
+/* wrapper geral para centralizar o card e limitar largura */
+.profile-wrapper {
+  width: 100%;
+  max-width: 1180px;
+  margin: 2rem auto;
+  position: relative;
+}
+
+/* profile card (glass) */
+.profile-card {
+  display: block;
+  padding: 1.25rem !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.015)) !important;
+  border: 1px solid var(--p-border) !important;
+  box-shadow: 0 18px 50px rgba(2,6,23,0.6) !important;
+  color: var(--p-foreground) !important;
+  position: relative;
+  overflow: visible;
+}
+
+/* PROFILE HEADER: avatar (left), info (center), stats (right) */
+.profile-header {
+  display: grid;
+  grid-template-columns: 220px 1fr 180px;
+  gap: 1rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+/* avatar frame: circular and slightly elevated */
+.profile-avatar-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* avatar circle */
+.profile-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.06);
+  box-shadow: 0 12px 38px rgba(2,6,23,0.5);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .45s cubic-bezier(.2,.9,.2,1);
+}
+.profile-avatar:hover img { transform: scale(1.03); }
+
+/* a small floating badge over avatar (like seller badge) */
+.avatar-badge {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+/* head info */
+.profile-headinfo { padding-left: 12px; }
+.profile-name {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--p-foreground) !important;
+}
+.profile-email { margin: 0.25rem 0 0.5rem 0; color: var(--p-muted) !important; font-size: 0.95rem; }
+
+/* action buttons next to name */
+.btn-edit, .btn-ghost {
+  border-radius: 10px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--p-border) !important;
+  background: rgba(255,255,255,0.02) !important;
+  color: var(--p-foreground) !important;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.25);
+  transition: transform .12s, box-shadow .12s;
+}
+.btn-edit:hover, .btn-ghost:hover { transform: translateY(-3px); }
+
+/* stats panel (right) */
+.profile-stats-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-end;
+  text-align: right;
+}
+.profile-stats-panel .stat { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+.profile-stats-panel small { color: var(--p-muted) !important; font-size: 0.85rem; }
+.profile-stats-panel strong { color: var(--p-foreground) !important; font-size: 1.05rem; font-weight: 800; }
+
+/* body (carrossel area) */
+.profile-body { padding-top: 1.1rem; }
+
+/* section title */
+.section-title { font-weight: 700; color: var(--p-foreground) !important; }
+
+/* SHOP-LIKE carousel tweaks */
+/* slightly larger cards for product feeling */
+.shop-carousel .item-card {
+  width: 260px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+/* image area elevated with subtle border-bottom shadow */
+.shop-carousel .item-media {
+  height: 180px !important;
+  overflow: hidden;
+  position: relative;
+}
+.shop-carousel .item-media img { width: 100%; height: 100%; object-fit: cover; display:block; }
+
+/* product meta row (title + price) */
+.shop-carousel .item-body {
+  padding: 0.85rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 140px;
+}
+
+/* title & description */
+.shop-carousel .item-title { font-size: 1rem !important; font-weight: 700 !important; color: #ffffff !important; }
+.shop-carousel .item-desc { color: var(--p-muted) !important; font-size: 0.85rem !important; }
+
+/* product footer: price + actions */
+.product-footer {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+}
+.product-price {
+  font-weight: 800;
+  color: var(--p-foreground);
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.95rem;
+}
+
+/* quick action button (add to cart / details) */
+.shop-carousel .btn-detalhes {
+  padding: 6px 10px !important;
+  border-radius: 10px !important;
+  background: var(--accent-primary) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 8px 26px rgba(59,92,214,0.12);
+  border: none !important;
+}
+
+/* hover emphasis */
+.shop-carousel .item-card:hover { transform: translateY(-10px) scale(1.01) !important; box-shadow: 0 28px 72px rgba(2,6,23,0.7) !important; }
+
+/* floating carousel buttons: slightly inset for shop style */
+.carrossel-wrapper .carrossel-btn-left { left: 4px !important; }
+.carrossel-wrapper .carrossel-btn-right { right: 4px !important; }
+
+/* dots background already defined in app.css; ensure z-index layering */
+.bg-decor { z-index: 0; }
+.profile-card { z-index: 5; }
+
+/* responsive: collapse grid to stacked layout */
+@media (max-width: 992px) {
+  .profile-header { grid-template-columns: 1fr !important; text-align: center; gap: .6rem; padding-bottom: .8rem; }
+  .profile-stats-panel { align-items: center; }
+  .profile-avatar { margin: 0 auto; }
+  .profile-headinfo { padding-left: 0; }
+  .shop-carousel .item-card { width: 220px !important; }
+}
+
+/* mobile: more compact */
+@media (max-width: 576px) {
+  .profile-wrapper { margin: 1rem; }
+  .profile-avatar { width: 110px; height: 110px; }
+  .shop-carousel .item-card { width: 170px !important; }
+  .shop-carousel .item-media { height: 140px !important; }
+  .profile-card { padding: 1rem !important; border-radius: 12px !important; }
+}
+
+/* accessibility focus */
+.item-card:focus, .btn-detalhes:focus, .btn-edit:focus {
+  outline: none;
+  box-shadow: 0 0 0 5px rgba(124,92,255,0.16) !important;
+}
+
+.badge-special{
+ background: linear-gradient(90deg, #3b82f6 0%, #7c5cff 100%); color: #ffffff; 
+}
+

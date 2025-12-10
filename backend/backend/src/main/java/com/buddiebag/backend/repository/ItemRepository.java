@@ -11,6 +11,4 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByUsuarioId(Long usuarioId);
-
-    Page<Item> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

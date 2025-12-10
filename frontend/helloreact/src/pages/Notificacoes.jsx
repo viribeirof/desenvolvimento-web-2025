@@ -9,7 +9,7 @@ const Notificacoes = () => {
             <Navegacao />
             <Container className="mt-3">
                 <Outlet />
-                <RequestsRecebidas />
+                <RequestsRecebidas />   
             </Container>
         </>
     )

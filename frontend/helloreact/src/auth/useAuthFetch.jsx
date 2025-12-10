@@ -1,16 +1,8 @@
-// src/auth/useAuthFetch.jsx (versão debug +   robusta)
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-const DEFAULT_REFRESH_PATH = "/auth/refresh";
+const DEFAULT_REFRESH_PATH = "http://localhost:8080/auth/refresh";
 
-/**
- * Robust useAuthFetch (debug-friendly)
- * - anexa Authorization se existir token
- * - tenta refresh em 401 (POST para refreshPath) usando cookies (credentials: 'include')
- * - re-executa a requisição original 1x após refresh
- * - logs detalhados em console para ajudar a debugar erros que lançam no fetch()
- */
 const useAuthFetch = ({ refreshPath = DEFAULT_REFRESH_PATH, withCredentials = true } = {}) => {
   const navigate = useNavigate();
 

@@ -2,11 +2,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import Navegacao from "../Navbar";
-import { Container } from "react-bootstrap";
+import { Container, Alert, Spinner } from "react-bootstrap";
 import { useAuth } from "../../auth/useAuth";
 import { useAuthFetch } from "../../auth/useAuthFetch";
 import Toast from "../shared/Toast";
 import { fetchImageWithToken } from "../shared/fetchImageWithToken";
+import CarrosselItens from "../item/CarrosselItens";
+
+import '../../assets/PerfilUsuario.css';
+import '../../assets/CriarItem.css';
+import '../../assets/App.css';
 
 const UsuarioDetalhes = () => {
   const { id } = useParams();
@@ -15,11 +20,12 @@ const UsuarioDetalhes = () => {
   const authFetch = useAuthFetch();
 
   const [usuario, setUsuario] = useState(null);
+  const [avatarSrc, setAvatarSrc] = useState("/avatar-placeholder.png");
+  const [itens, setItens] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [avatarSrc, setAvatarSrc] = useState("/placeholder.png");
 
-  const imgObjectUrlRef = useRef(null);
+  const objectUrlsRef = useRef([]);
   const imgAbortRef = useRef(null);
 
   useEffect(() => {
@@ -31,206 +37,229 @@ const UsuarioDetalhes = () => {
   useEffect(() => {
     if (!user && !authLoading) return;
 
+    const ac = new AbortController();
+    const signal = ac.signal;
     let mounted = true;
-    const controller = new AbortController();
-    const cacheKey = `usuario_${id}_cache`;
 
-    const loadUser = async () => {
+    const revokeAll = () => {
+      objectUrlsRef.current.forEach((u) => {
+        try { URL.revokeObjectURL(u); } catch {}
+      });
+      objectUrlsRef.current = [];
+    };
+
+    const carregarImagem = async (refOrUrl) => {
+      if (!refOrUrl) return null;
+      if (typeof refOrUrl === "string" && (refOrUrl.startsWith("http") || refOrUrl.startsWith("data:") || refOrUrl.startsWith("blob:"))) {
+        return refOrUrl;
+      }
+      try {
+        const result = await fetchImageWithToken(refOrUrl, { signal });
+        if (!result) return null;
+        if (result instanceof Blob) {
+          const objUrl = URL.createObjectURL(result);
+          objectUrlsRef.current.push(objUrl);
+          return objUrl;
+        }
+        if (typeof result === "string") return result;
+        if (result && typeof result.blob === "function") {
+          const blob = await result.blob();
+          const objUrl = URL.createObjectURL(blob);
+          objectUrlsRef.current.push(objUrl);
+          return objUrl;
+        }
+        return null;
+      } catch (err) {
+        if (err?.name === "AbortError") return null;
+        console.warn("Erro ao carregar imagem:", err);
+        return null;
+      }
+    };
+
+    const fetchUsuarioEItens = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const resp = await authFetch(`http://localhost:8080/api/usuarios/${encodeURIComponent(id)}`, {
-          method: "GET",
-          signal: controller.signal,
+        const usuarioRes = await authFetch(`http://localhost:8080/api/usuarios/${encodeURIComponent(id)}`, { method: "GET", signal });
+        if (!usuarioRes.ok) {
+          const body = await usuarioRes.json().catch(() => null);
+          throw new Error(body?.message || `Erro ao buscar usuário: ${usuarioRes.status}`);
+        }
+        const usuarioData = await usuarioRes.json();
+        if (!mounted) return;
+        setUsuario(usuarioData ?? null);
+
+        const avatarRef = usuarioData?.avatar || usuarioData?.avatarUrl || usuarioData?.fotoPerfil || usuarioData?.foto || null;
+        if (avatarRef) {
+          const a = await carregarImagem(avatarRef);
+          if (a) setAvatarSrc(a);
+          else setAvatarSrc("/avatar-placeholder.png");
+        } else {
+          setAvatarSrc("/avatar-placeholder.png");
+        }
+
+        const itensRes = await authFetch(`http://localhost:8080/api/usuarios/${encodeURIComponent(id)}/itens`, { method: "GET", signal });
+        let itensArr = [];
+        if (itensRes.ok) itensArr = await itensRes.json();
+
+        const fotosPromises = (Array.isArray(itensArr) ? itensArr : []).map(async (it) => {
+          if (it.fotoSrc) return it.fotoSrc;
+          if (it.fotoItem && typeof it.fotoItem === "string" && it.fotoItem.startsWith("http")) return it.fotoItem;
+          if (it.fotoItem) {
+            const u = await carregarImagem(it.fotoItem);
+            return u ?? it.fotoUrl ?? "/placeholder.png";
+          }
+          return it.fotoUrl ?? "/placeholder.png";
         });
 
-        if (!mounted) return;
+        const fotos = await Promise.all(fotosPromises);
+        const mapped = (Array.isArray(itensArr) ? itensArr : []).map((it, idx) => ({ ...it, fotoSrc: fotos[idx] ?? it.fotoSrc ?? "/placeholder.png" }));
 
-        if (resp.status === 200) {
-          const data = await resp.json();
-          setUsuario(data);
-          try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch {}
-        } else if (resp.status === 304) {
-          const cache = localStorage.getItem(cacheKey);
-          if (cache) {
-            const cached = JSON.parse(cache);
-            setUsuario(cached);
-          } else {
-            setError("Nenhum dado em cache.");
-          }
-        } else {
-          const body = await resp.json().catch(() => null);
-          throw new Error(body?.message || `Erro ao carregar usuário: ${resp.status}`);
-        }
+        if (!mounted) return;
+        setItens(mapped);
       } catch (err) {
-        if (err?.name === "AbortError") {
-          return;
-        }
-        console.error("Erro ao carregar usuário:", err);
-        const cache = localStorage.getItem(cacheKey);
-        if (cache) {
-          try {
-            setUsuario(JSON.parse(cache));
-            setError(null);
-          } catch {
-            setUsuario(null);
-            setError("Erro ao carregar usuário.");
-          }
-        } else {
-          setUsuario(null);
-          setError(err.message || "Erro ao carregar usuário.");
-        }
+        if (err?.name === "AbortError") return;
+        console.error("Erro ao carregar usuário/itens:", err);
+        setError(err.message || "Erro ao carregar dados do usuário.");
+        setUsuario(null);
+        setItens([]);
       } finally {
         if (mounted) setLoading(false);
       }
     };
 
-    loadUser();
+    fetchUsuarioEItens();
 
     return () => {
       mounted = false;
-      controller.abort();
+      try { ac.abort(); } catch {}
+      revokeAll();
     };
   }, [id, authFetch, authLoading, user]);
 
   useEffect(() => {
-    if (imgAbortRef.current) {
-      try { imgAbortRef.current.abort(); } catch {}
-      imgAbortRef.current = null;
-    }
-    if (imgObjectUrlRef.current) {
-      try { URL.revokeObjectURL(imgObjectUrlRef.current); } catch {}
-      imgObjectUrlRef.current = null;
-    }
-
-    if (!usuario) {
-      setAvatarSrc("/placeholder.png");
-      return;
-    }
-
-    const foto = usuario.fotoPerfil ?? usuario.avatar ?? usuario.avatarUrl ?? null;
-    if (!foto) {
-      setAvatarSrc("/placeholder.png");
-      return;
-    }
-
-    if (typeof foto === "string" && (foto.startsWith("data:") || foto.startsWith("http"))) {
-      setAvatarSrc(foto);
-      return;
-    }
-
-    const ac = new AbortController();
-    imgAbortRef.current = ac;
-
-    const carregar = async () => {
-      try {
-        const result = await fetchImageWithToken(foto, { signal: ac.signal });
-
-        if (!result) {
-          setAvatarSrc("/placeholder.png");
-          return;
-        }
-
-        // se result for um Blob 
-        if (result instanceof Blob) {
-          const objUrl = URL.createObjectURL(result);
-          imgObjectUrlRef.current = objUrl;
-          setAvatarSrc(objUrl);
-          return;
-        }
-
-        // se for string (URL)
-        if (typeof result === "string") {
-          setAvatarSrc(result);
-          return;
-        }
-
-        // se for Response-like, tenta extrair blob
-        if (result && typeof result.blob === "function") {
-          const blob = await result.blob();
-          const objUrl = URL.createObjectURL(blob);
-          imgObjectUrlRef.current = objUrl;
-          setAvatarSrc(objUrl);
-          return;
-        }
-        setAvatarSrc("/placeholder.png");
-      } catch (err) {
-        if (err?.name === "AbortError") {
-          return;
-        }
-        console.warn("Erro ao carregar avatar:", err);
-        setAvatarSrc("/placeholder.png");
-      } finally {
-        if (imgAbortRef.current === ac) imgAbortRef.current = null;
-      }
-    };
-
-    carregar();
-
-    // cleanup quando usuario muda/desmonta
     return () => {
+      objectUrlsRef.current.forEach(u => { try { URL.revokeObjectURL(u); } catch {} });
+      objectUrlsRef.current = [];
       if (imgAbortRef.current) {
         try { imgAbortRef.current.abort(); } catch {}
         imgAbortRef.current = null;
       }
-      if (imgObjectUrlRef.current) {
-        try { URL.revokeObjectURL(imgObjectUrlRef.current); } catch {}
-        imgObjectUrlRef.current = null;
-      }
     };
-  }, [usuario]);
+  }, []);
 
   if (authLoading) return null;
-  if (loading) return <p className="text-center mt-4">Carregando usuário...</p>;
+  if (loading) return (
+    <>
+      <Navegacao />
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "40vh" }}>
+        <Spinner animation="border" />
+      </Container>
+    </>
+  );
 
   return (
     <>
       <Navegacao />
-      <Container className="mt-3">
-        <Outlet />
+      <Outlet />
 
-        {error && <Toast error={error} setError={() => setError(null)} />}
+      <Container fluid className="lux-bg d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+        <div className="profile-wrapper" style={{ width: "100%", maxWidth: 1200 }}>
+          <div className="glass-card profile-card">
+            {error && <div className="p-3"><Toast error={error} setError={() => setError(null)} /></div>}
 
-        {!usuario ? (
-          <div className="mt-4 text-center">
-            <p>Usuário não encontrado.</p>
+            {!usuario ? (
+              <div className="p-4 text-center">
+                <Alert variant="warning">Usuário não encontrado.</Alert>
+              </div>
+            ) : (
+              <>
+                <div className="profile-header">
+                  <div className="profile-avatar-frame">
+                    <div className="profile-avatar">
+                      <img
+                        src={avatarSrc}
+                        alt={usuario?.nome ?? "Avatar"}
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "/avatar-placeholder.png"; }}
+                      />
+                    </div>
+                    <div className="avatar-badge">
+                      <span className="badge badge-special">{usuario?.nome}</span>
+                    </div>
+                  </div>
+
+                  <div className="profile-headinfo">
+                    <h4 className="profile-name">{usuario?.nome}</h4>
+                    <p className="profile-email muted">{usuario?.email ?? "—"}</p>
+
+                    <div className="d-flex align-items-center gap-2 mt-2 justify-content-center justify-content-sm-start">
+                      {user?.id === String(usuario?.id) ? (
+                        <button className="btn-edit" onClick={() => navigate(`/usuario/editar/${usuario?.id}`)}>Editar perfil</button>
+                      ) : (
+                        <button className="btn-outline-light" onClick={() => navigate(-1)}>Voltar</button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="profile-stats-panel d-flex flex-row justify-content-between flex-sm-column gap-3">
+                    <div className="stat">
+                      <small className="muted">Total</small>
+                      <strong>{itens.length}</strong>
+                    </div>
+                    <div className="stat">
+                      <small className="muted">Disponíveis</small>
+                      <strong>{itens.filter(i => i.status === "DISPONIVEL").length}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="profile-body">
+                  <h5 className="section-title">Itens de {usuario?.nome}</h5>
+
+                  <section className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h6 className="mb-0">Todos</h6>
+                      <small className="muted">{itens.length} encontrados</small>
+                    </div>
+
+                    <div className="carrossel-wrapper shop-carousel">
+                      <CarrosselItens listaItens={itens} onItemClick={(item) => navigate(`/item/${item.id}`)} />
+                    </div>
+                  </section>
+
+                  <section className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h6 className="mb-0">Disponíveis</h6>
+                      <small className="muted">{itens.filter(i => i.status === "DISPONIVEL").length} encontrados</small>
+                    </div>
+
+                    <div className="carrossel-wrapper shop-carousel">
+                      <CarrosselItens listaItens={itens.filter(i => i.status === "DISPONIVEL")} onItemClick={(item) => navigate(`/item/${item.id}`)} />
+                    </div>
+                  </section>
+
+                  <section>
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h6 className="mb-0">Indisponíveis</h6>
+                      <small className="muted">{itens.filter(i => i.status !== "DISPONIVEL").length} encontrados</small>
+                    </div>
+
+                    <div className="carrossel-wrapper shop-carousel">
+                      <CarrosselItens listaItens={itens.filter(i => i.status !== "DISPONIVEL")} onItemClick={(item) => navigate(`/item/${item.id}`)} />
+                    </div>
+                  </section>
+                </div>
+              </>
+            )}
           </div>
-        ) : (
-          <div className="mt-4">
-            <h2>{usuario.nome}</h2>
-            <p><b>Email:</b> {usuario.email}</p>
 
-            <div
-              className="rounded-circle overflow-hidden flex-shrink-0"
-              style={{
-                width: "70px",
-                height: "70px",
-                backgroundColor: "#f0f0f0",
-              }}
-            >
-              <img
-                src={avatarSrc}
-                alt={`Foto de perfil de ${usuario.nome}`}
-                className="w-100 h-100"
-                style={{ objectFit: "cover" }}
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/placeholder.png";
-                }}
-              />
-            </div>
-
-            <div className="mt-3">
-              <button
-                className="btn btn-primary"
-                onClick={() => navigate(`/usuario/editar/${id}`)}
-              >
-                Editar Usuário
-              </button>
-            </div>
+          <div className="bg-decor" aria-hidden="true">
+            <span className="dot dot-1" />
+            <span className="dot dot-2" />
+            <span className="dot dot-3" />
           </div>
-        )}
+        </div>
       </Container>
     </>
   );

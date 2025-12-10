@@ -5,9 +5,9 @@ import { useAuth } from "../auth/useAuth";
 
 const Navegacao = () => {
   const { user, logout } = useAuth();
-
   return (
-    <Navbar bg="dark" variant="dark" expand="lg"> <Container className="bg-dark">
+    <Navbar bg="dark" variant="dark" expand="lg" > 
+    <Container className="bg-dark">
       <Navbar.Brand as={Link} to="/">Home</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav"> <Nav className="me-auto">
@@ -20,8 +20,9 @@ const Navegacao = () => {
           <Navbar.Text className="text-white">
             {user.sub}
           </Navbar.Text> <Button variant="outline-light" size="sm" onClick={logout}>
-            Logout </Button> </div>
+            Sair </Button> </div>
         )}
+
       </Navbar.Collapse> </Container> </Navbar>
   );
 };

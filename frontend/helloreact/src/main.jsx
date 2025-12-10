@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   { path: "/sobre", element: <PrivateRoute><Sobre /></PrivateRoute> },
   { path: "/contato", element: <PrivateRoute><Contato /></PrivateRoute> },
   { path: "/item/criar", element: <PrivateRoute><CriarItem /></PrivateRoute> },
-  { path: "/usuario", element: <PrivateRoute><ListarUsuarios /></PrivateRoute> },
+  // { path: "/usuario", element: <PrivateRoute><ListarUsuarios /></PrivateRoute> },
   { path: "/item", element: <PrivateRoute><ListarItens /></PrivateRoute> },
   { path: "/usuario/:id", element: <PrivateRoute><UsuarioDetalhes /></PrivateRoute> },
   { path: "/usuario/editar/:id", element: <PrivateRoute><AtualizarUsuario /></PrivateRoute> },

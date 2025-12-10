@@ -1,0 +1,177 @@
+/* ===============================================
+   TEMA DARK/LUXO – Tela Criar Item
+   (Use junto com className="criar-item-darkroot")
+   =============================================== */
+
+/* --- Root / Background Geral --- */
+.criar-item-darkroot {
+  background: linear-gradient(180deg, #0b1220 0%, #0f1724 100%) !important;
+  min-height: 100vh;
+  padding: 1rem !important;
+  color: #e9eef8 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.criar-item-darkroot,
+.criar-item-darkroot * {
+  color: #e9eef8 !important;
+}
+
+/* --- Wrapper principal do formulário --- */
+.criar-item-darkroot .item-form-wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.02)
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 14px 40px rgba(2, 6, 23, 0.66);
+}
+
+/* --- Labels --- */
+.criar-item-darkroot label {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* --- Inputs / Textarea / Select --- */
+.criar-item-darkroot .form-control,
+.criar-item-darkroot .form-control:focus {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #e9eef8 !important;
+  border-radius: 10px;
+  box-shadow: none !important;
+}
+
+.criar-item-darkroot textarea.form-control {
+  min-height: 90px;
+}
+
+/* --- Foco do input com brilho dourado --- */
+/* .criar-item-darkroot .form-control:focus {
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.1) !important;
+} */
+
+/* --- Card da prévia da imagem --- */
+.criar-item-darkroot .image-preview {
+  width: 85px;
+  height: 85px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+}
+
+/* --- Botão Primário --- */
+.criar-item-darkroot .btn-primary,
+.criar-item-darkroot .btn-primary:hover,
+.criar-item-darkroot .btn-primary:focus {
+  background: linear-gradient(135deg, #d4af37, #a37e1f) !important;
+  border: none !important;
+  color: #111 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.18) !important;
+}
+
+/* --- Alerts (sucesso/erro) --- */
+.criar-item-darkroot .alert {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  border-radius: 10px;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 640px) {
+  .criar-item-darkroot .item-form-wrap {
+    padding: 1.2rem !important;
+    border-radius: 12px;
+  }
+}
+/* ===== Responsividade e limites da imagem - patch ===== */
+
+/* Limita a largura máxima da coluna da imagem em desktop para manter proporção loja */
+.detail-header {
+  grid-template-columns: 360px 1fr !important; /* garante limite da coluna da imagem em desktop */
+}
+
+/* Em vez de deixar a imagem "fluir" indefinidamente, definimos max-width no wrapper */
+.item-media-wrap {
+  max-width: 360px;        /* não ficará maior que isso */
+  width: 100%;             /* ocupa a coluna normalmente */
+  height: 360px;           /* desktop default */
+  margin: 0 auto;          /* centraliza dentro da coluna */
+}
+
+/* Se você estiver mostrando o componente em contêiner menor, protege com max-height também */
+.item-media-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Reduz gradualmente a imagem e altera layout em breakpoints */
+@media (max-width: 1200px) {
+  .detail-header { grid-template-columns: 320px 1fr !important; }
+  .item-media-wrap { max-width: 320px; height: 320px; }
+  .shop-carousel .item-card { width: 230px !important; }
+}
+
+@media (max-width: 992px) {
+  /* transforma em uma coluna única: imagem em cima, meta abaixo */
+  .detail-header {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* imagem menos alta para caber no mobile */
+  .item-media-wrap {
+    max-width: 680px;
+    height: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .shop-carousel .item-card { width: 220px !important; }
+}
+
+@media (max-width: 576px) {
+  /* mobile compacto */
+  .item-media-wrap {
+    max-width: 100%;
+    width: 100%;
+    height: 220px !important; /* reduz bastante em telas pequenas */
+    border-radius: 10px;
+  }
+
+  .detail-meta { padding: 0.5rem 0 !important; }
+  .detail-header { padding: 0.75rem !important; }
+  .detail-body { padding: 0.75rem !important; }
+
+  /* evita que o card ocupe quase toda a vertical no mobile */
+  .item-card { padding: 0.6rem !important; border-radius: 12px !important; }
+
+  /* carrossel cards menores */
+  .shop-carousel .item-card { width: 160px !important; }
+  .shop-carousel .item-media { height: 120px !important; }
+
+  /* se action ficar fixa, reduz paddings */
+  .detail-actions { padding: 10px !important; bottom: 10px !important; left: 10px !important; right: 10px !important; }
+}
+
+/* opcional: evita overflow horizontal em telas muito estreitas */
+.item-detail-root, .item-card {
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+}
+

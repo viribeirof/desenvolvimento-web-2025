@@ -1,4 +1,5 @@
 // authService.login
+// authService.login
 export const login = async (email, senha) => {
   const res = await fetch("http://localhost:8080/auth/login", {
     method: "POST",
@@ -6,16 +7,19 @@ export const login = async (email, senha) => {
     credentials: 'include',
     body: JSON.stringify({ email, senha })
   });
+
+  const data = await res.json().catch(() => ({}));
+
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    const message = err.messages?.[0] || err.error || err.erro || "Falha no login";
+    const message = data.messages?.[0] || data.erro || data.error || "Falha no login";
     throw new Error(message);
   }
-  const data = await res.json();
-  // salva access token (sessionStorage recomendado)
+
+  // salva access token no session storage
   sessionStorage.setItem('at', data.accessToken);
   return data;
 };
+
 
 export const logout = () => {
   localStorage.removeItem("accessToken");

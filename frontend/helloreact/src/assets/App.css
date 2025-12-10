@@ -1,0 +1,18 @@
+html, body {
+  background-color: #0b1220 !important; /* mesma cor da sua lux-bg */
+  min-height: 100vh;
+  color: aliceblue !important;
+}
+
+.search-box .search-input {
+  height: 35px;           /* altura do input */
+  font-size: 0.9rem;      /* tamanho da fonte */
+  padding: 0 0.5rem;      /* remove padding vertical extra */
+  line-height: 35px;      /* igual à altura do input para centralizar verticalmente */
+  box-sizing: border-box; /* garante que padding não quebre o layout */
+  color:aliceblue !important;
+}
+.navbar.navbar-dark.bg-dark {
+  position: relative !important;
+  z-index: 9999 !important;
+}

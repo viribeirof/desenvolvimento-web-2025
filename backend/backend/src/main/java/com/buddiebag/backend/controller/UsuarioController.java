@@ -1,6 +1,4 @@
 package com.buddiebag.backend.controller;
-
-import com.buddiebag.backend.dto.PerfilDto;
 import com.buddiebag.backend.dto.UsuarioCreateDto;
 import com.buddiebag.backend.dto.UsuarioDto;
 import com.buddiebag.backend.dto.UsuarioUpdateDto;
@@ -13,15 +11,17 @@ import com.buddiebag.backend.repository.UsuarioRepository;
 import com.buddiebag.backend.service.UsuarioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -109,20 +109,41 @@ public class UsuarioController {
                     .body(Map.of("message", "Item não encontrado"));
         }
     }
-    @GetMapping("/me")
-    public ResponseEntity<?> me(Authentication auth) {
 
-        Usuario user = usuarioRepository.findByEmail(auth.getName())
+    @GetMapping("/{id}/itens")
+    public ResponseEntity<?> getItensDoUsuario(@PathVariable Long id) {
+
+        Usuario user = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         List<Item> itens = itemRepository.findByUsuarioId(user.getId());
 
-        return ResponseEntity.ok(new PerfilDto(user, itens));
+        return ResponseEntity.ok(itens);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.ok(Map.of("message", "Usuário deletado com sucesso!"));
     }
+    
+    @GetMapping("/{id}/foto")
+    public ResponseEntity<byte[]> pegarFotoUsuario(@PathVariable Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
+        if (usuario.getFotoPerfil() == null || usuario.getFotoPerfil().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Se a imagem estiver salva como Base64 no banco
+        byte[] bytes = Base64.getDecoder().decode(usuario.getFotoPerfil());
+        String contentType = usuario.getFotoPerfilContentType() != null
+                ? usuario.getFotoPerfilContentType()
+                : "image/jpeg";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .body(bytes);
+    }
 }

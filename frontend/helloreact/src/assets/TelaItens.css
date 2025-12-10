@@ -1,0 +1,301 @@
+/* ===== Melhorias: mobile-friendly e caso single item ===== */
+
+/* base: carrossel é sempre flex row */
+.carrossel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 8px 6px;
+  -webkit-overflow-scrolling: touch;
+  align-items: start;
+}
+
+/* Esconder barra (visual) */
+.carrossel::-webkit-scrollbar { display: none; }
+.carrossel { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Default item-card: use flex: 0 0 auto para manter controle do tamanho */
+.item-card {
+  display: inline-flex;
+  flex-direction: column;
+  flex: 0 0 auto;   /* evita crescimento automático */
+  width: 220px;
+  min-width: 160px;
+  max-width: 320px;
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* imagem: garante proporção e evita thumbnails "finas" */
+.item-media {
+  width: 100%;
+  aspect-ratio: 4/3;      /* good default for cards */
+  min-height: 120px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.03);
+}
+.item-media img { width:100%; height:100%; object-fit: cover; display:block; }
+
+/* small screens: mostrar 2 cards parcialmente/fully visíveis */
+@media (max-width: 576px) {
+  /* meta: 2 cards por viewport (com gap) */
+  .carrossel {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 10px;
+  }
+
+  /* calc based: (100% - gaps* ) / 2 */
+  .item-card {
+    flex: 0 0 calc(50% - 10px); /* 2 cards side-by-side */
+    width: calc(50% - 10px);
+    min-width: 140px;
+    max-width: calc(50% - 10px);
+    border-radius: 12px;
+  }
+
+  .item-media { aspect-ratio: 1/1; min-height: 120px; } /* square preview in tiny screens */
+  .item-title { font-size: 0.92rem; }
+  .item-body { padding: 8px; }
+}
+
+/* very small devices (<=420px) show ~2 smaller cards */
+@media (max-width: 420px) {
+  .item-card { flex: 0 0 calc(50% - 8px); width: calc(50% - 8px); min-width: 120px; }
+  .item-media { min-height: 100px; }
+}
+
+/* tablet / desktop: show more, keep previous rules */
+@media (min-width: 768px) {
+  .item-card { flex: 0 0 260px; width: 260px; max-width: 300px; }
+  .item-media { aspect-ratio: 4/3; min-height: 140px; }
+}
+
+/* ===== Caso de 1 item: aplicar classe .single no container (JS) =====
+   centraliza o card e limita largura para não ficar gigante */
+.carrossel.single {
+  justify-content: start;
+}
+
+
+/* mobile single: evitar ocupar toda altura */
+@media (max-width: 576px) {
+ .item-card {
+    flex: 0 0 72%;
+    width: 72%;
+    max-width: 360px;
+  }
+  .carrossel.single {
+  justify-content: start;
+  margin-left: -4%
+}
+
+}
+
+/* scroll snapping (opcional, keeps UX nice) */
+.carrossel { scroll-snap-type: x proximity; }
+.item-card { scroll-snap-align: start; }
+
+/* small polish: center fully-visible cards if there is empty area */
+.carrossel:empty { justify-content: center; }
+
+
+/* footer do card com badge + botão */
+.item-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.btn-detalhes {
+  margin-left: auto;
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  border-radius: 8px;
+}
+
+/* ajustes para desktop (cards maiores, menos overflow) */
+@media (min-width: 768px) {
+  .carrossel {
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .item-card {
+    width: 260px;
+    max-width: 320px;
+    min-width: 220px;
+  }
+
+  .item-media {
+    aspect-ratio: 4 / 3;
+    min-height: 180px;
+  }
+
+  /* mais paisagem em desktop */
+  .item-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* telas muito pequenas — diminuir ainda mais para caber 2-3 cards visíveis */
+@media (max-width: 420px) {
+  .item-card {
+    width: 160px;
+    min-width: 150px;
+    max-width: 180px;
+  }
+
+  .item-media {
+    min-height: 120px;
+  }
+
+  .item-body {
+    padding: 8px;
+  }
+
+  .item-title {
+    font-size: 0.88rem;
+  }
+
+  .item-footer {
+    gap: 6px;
+  }
+
+  .btn-detalhes {
+    padding: 6px 6px;
+    font-size: 0.72rem;
+  }
+}
+
+/* alternativa: make carousel snap to cards for nicer UX */
+.carrossel {
+  scroll-snap-type: x mandatory;
+}
+
+.item-card {
+  scroll-snap-align: start;
+}
+
+
+/* Badges */
+.item-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-available {
+  background: linear-gradient(90deg, #5f9653, #166d39);
+  color: #ffffff !important;
+}
+
+.badge-unavailable {
+  background: #c1c1c15e;
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Botão detalhes */
+.btn-detalhes {
+  flex: 0.5;
+  /* ocupa todo espaço restante */
+  text-align: center;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  color: #fff !important;
+  background: #645994 !important;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(30, 21, 63, 0.22), 0 2px 6px rgba(6, 17, 33, 0.08);
+}
+
+.btn-detalhes:hover {
+  transform: translateY(-1px);
+}
+
+/* ===== BOTÕES FLOTANTES ===== */
+.carrossel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(8, 10, 15, 0.42);
+  backdrop-filter: blur(6px);
+  color: #e9eef8;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.95;
+  transition: transform .14s, box-shadow .14s;
+  z-index: 12;
+}
+
+.carrossel-btn-left {
+  left: 8px;
+}
+
+.carrossel-btn-right {
+  right: 8px;
+}
+
+.carrossel-btn:hover {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 18px 46px rgba(2, 6, 23, 0.7);
+}
+
+.carrossel-btn:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+/* Mostra os botões apenas ao hover/fofo */
+.carrossel-wrapper .carrossel-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carrossel-wrapper:hover .carrossel-btn,
+.carrossel-wrapper:focus-within .carrossel-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 992px) {
+  .item-card {
+    flex-basis: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .carrossel {
+    gap: 12px;
+  }
+
+  .item-card {
+    flex-basis: 90%;
+    /* ocupa quase toda a tela no mobile */
+  }
+
+  .item-footer {
+    flex-direction: column;
+    align-items: stretch; /* faz ambos ocuparem largura adequada */
+    gap: 0.4rem;
+    text-align: center;
+  }
+
+  .item-footer .item-badge {
+    width: 100%; /* opcional: badge ocupa largura toda */
+  }
+
+  .item-footer .btn-detalhes {
+    width: 100%; /* botão 100% — fica lindo em mobile */
+  }
+
+}

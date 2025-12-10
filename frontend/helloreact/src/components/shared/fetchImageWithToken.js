@@ -24,7 +24,7 @@ export const fetchImageWithToken = async (rawUrl) => {
     // se 401 tenta refresh
     if (res.status === 401) {
       try {
-        const refreshUrl = `${window.location.origin}/auth/refresh`; 
+        const refreshUrl = "http://localhost:8080/auth/refresh"; 
         const refreshRes = await fetch(refreshUrl, {
           method: "POST",
           credentials: "include",

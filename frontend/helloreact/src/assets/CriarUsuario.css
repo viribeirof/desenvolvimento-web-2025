@@ -1,0 +1,379 @@
+/* src/assets/CriarUsuario.css
+   Overrides fortes para garantir tema escuro/luxo na tela CriarUsuario
+   (Use junto com className="criar-usuario-darkroot" no Container)
+*/
+
+/* --- root da tela: FORÇA background escuro --- */
+.criar-usuario-darkroot {
+  /* background: linear-gradient(180deg, #0b1220 0%, #0f1724 100%) !important; */
+  min-height: 100vh !important;
+  padding: 1rem !important;
+  color: #e9eef8 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* aplica a cor clara a todos os textos dentro do root */
+.criar-usuario-darkroot, 
+.criar-usuario-darkroot * {
+  color: #e9eef8 !important;
+}
+
+/* --- container / wrapper --- */
+.criar-usuario-darkroot .login-wrap {
+  width: 100% !important;
+  max-width: 920px !important;
+  margin: 0 auto !important;
+  z-index: 5 !important;
+}
+
+/* --- força glass/card escuro (sobrescreve bootstrap) --- */
+.criar-usuario-darkroot .card,
+.criar-usuario-darkroot .card-body,
+.criar-usuario-darkroot .glass-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 14px 40px rgba(2,6,23,0.66) !important;
+  color: #e9eef8 !important;
+  border-radius: 14px !important;
+}
+
+/* garante que card-footer não apareça branco */
+.criar-usuario-darkroot .card-footer {
+  background: transparent !important;
+  color: rgba(233,238,248,0.65) !important;
+  border-top: none !important;
+}
+
+/* --- Inputs: força fundo escuro e remove o fundo branco no focus do bootstrap --- */
+.criar-usuario-darkroot .form-control,
+.criar-usuario-darkroot .form-control.fancy-input,
+.criar-usuario-darkroot .form-control:focus,
+.criar-usuario-darkroot .form-control.fancy-input:focus {
+  background: rgba(255,255,255,0.03) !important;
+  color: #e9eef8 !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+/* remove o branco do bootstrap no :focus dentro de form-floating */
+.criar-usuario-darkroot .form-floating .form-control:focus {
+  background-color: rgba(255,255,255,0.04) !important;
+  outline: none !important;
+  border-color: rgba(124,92,255,0.6) !important;
+  box-shadow: 0 6px 20px rgba(79,108,148,0.07) !important;
+}
+
+/* labels form-floating coerentes */
+.criar-usuario-darkroot .form-floating > label {
+  color: rgba(233,238,248,0.65) !important;
+}
+.criar-usuario-darkroot .form-floating .form-control:focus + label {
+  color: rgba(255,215,0,0.95) !important;
+}
+
+/* --- Upload box / avatar --- */
+.criar-usuario-darkroot .brand-logo,
+.criar-usuario-darkroot .brand-logo-placeholder,
+.criar-usuario-darkroot .brand-logo img,
+.criar-usuario-darkroot .logo-img,
+.criar-usuario-darkroot img.rounded-circle {
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6) !important;
+  color: rgba(233,238,248,0.95) !important;
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+}
+
+/* upload area */
+.criar-usuario-darkroot .upload-box {
+  border-radius: 12px !important;
+  border: 1px dashed rgba(255,255,255,0.06) !important;
+  background: rgba(255,255,255,0.02) !important;
+  color: rgba(233,238,248,0.9) !important;
+}
+.criar-usuario-darkroot .upload-box:hover,
+.criar-usuario-darkroot .upload-box:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.6) !important;
+  border-color: rgba(212,175,55,0.12) !important;
+}
+
+/* secondary outline */
+.criar-usuario-darkroot .btn-outline-light,
+.criar-usuario-darkroot .btn-outline-light:focus,
+.criar-usuario-darkroot .btn-outline-light:hover {
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(255,255,255,0.02) !important;
+  color: rgba(233,238,248,0.95) !important;
+}
+
+/* alerts adaptadas */
+.criar-usuario-darkroot .alert {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+/* override classes bootstrap problemáticas */
+.criar-usuario-darkroot .bg-light,
+.criar-usuario-darkroot .bg-white,
+.criar-usuario-darkroot .container.bg-light {
+  background: transparent !important;
+  color: #e9eef8 !important;
+}
+.criar-usuario-darkroot.container,
+.criar-usuario-darkroot .container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  margin-left: 0 auto !important;
+  margin-right: 0 auto !important;
+}   
+
+/* responsividade */
+@media (max-width: 640px) {
+  .criar-usuario-darkroot .brand-logo-placeholder,
+  .criar-usuario-darkroot .brand-logo img { width: 48px !important; height: 48px !important; }
+  .criar-usuario-darkroot .glass-card,
+  .criar-usuario-darkroot .card { padding: 1rem !important; border-radius: 12px !important; }
+}
+/* === Corrige form-floating para textarea no tema dark === */
+
+/* garante que textarea dentro do form-floating mantenha o fundo escuro (evita branco inesperado) */
+.criar-usuario-darkroot .form-floating textarea.form-control,
+.criar-usuario-darkroot .form-floating textarea.form-control:focus {
+  background: rgba(255,255,255,0.03) !important;
+  color: #e9eef8 !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  padding: 1rem 0.75rem !important; /* garante espaço para o label flutuante */
+  line-height: 1.4;
+}
+
+/* label não deve ter fundo branco cobrindo o campo — deixamos transparente e com padding lateral */
+.criar-usuario-darkroot .form-floating > label {
+  background: transparent !important;
+  padding: 0 0.35rem !important;   /* evita que o label cubra o texto ao flutuar */
+  color: rgba(233,238,248,0.65) !important;
+}
+
+/* quando o campo estiver em foco, label muda a cor dourada (mantendo fundo transparente) */
+.criar-usuario-darkroot .form-floating .form-control:focus + label {
+  color: rgba(255,215,0,0.95) !important;
+  background: transparent !important;
+}
+
+/* placeholder escuro e legível */
+.criar-usuario-darkroot .form-floating textarea.form-control::placeholder {
+  color: rgba(233,238,248,0.35) !important;
+}
+
+/* se quiser, mantém a transição suave */
+.criar-usuario-darkroot .form-floating textarea.form-control,
+.criar-usuario-darkroot .form-floating > label {
+  transition: all 180ms ease;
+}
+
+/* Select container */
+.fancy-select {
+  background-color: #0b1220; /* fundo escuro */
+  color: #e9eef8;            /* texto claro */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  appearance: none; /* remove estilo nativo em alguns browsers */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Opções (funciona no Firefox) */
+.fancy-select option {
+  background-color: #0b1220; /* fundo escuro */
+  color: #e9eef8;            /* texto claro */
+}
+/* =========================
+   Compatibilidade: Fazer o tema criar-usuario-darkroot aplicar
+   às classes usadas por AtualizarItem (item-form-wrap, image-preview, etc)
+   Cole este bloco **depois** do arquivo CriarUsuario.css
+   ========================= */
+
+.criar-usuario-darkroot .item-form-wrap {
+  /* reaplica o estilo do .login-wrap / .card */
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 14px 40px rgba(2,6,23,0.66) !important;
+  padding: 1.8rem !important;
+  border-radius: 14px !important;
+  color: #e9eef8 !important;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* garantir que a preview de imagem siga o estilo do upload/avatar */
+.criar-usuario-darkroot .image-preview,
+.criar-usuario-darkroot .item-media-wrap img,
+.criar-usuario-darkroot img.image-preview {
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6) !important;
+  width: 96px !important;
+  height: 96px !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+}
+
+/* inputs e textarea do AtualizarItem (forçar cores) */
+.criar-usuario-darkroot .item-form-wrap .form-control,
+.criar-usuario-darkroot .item-form-wrap textarea.form-control,
+.criar-usuario-darkroot .item-form-wrap select.form-control {
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  color: #e9eef8 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+/* placeholder e labels */
+.criar-usuario-darkroot .item-form-wrap .form-control::placeholder,
+.criar-usuario-darkroot .item-form-wrap label {
+  color: rgba(233,238,248,0.65) !important;
+}
+
+/* foco com brilho dourado (mesmo efeito do CriarUsuario) */
+.criar-usuario-darkroot .item-form-wrap .form-control:focus {
+  border-color: rgba(124,92,255,0.6) !important;
+  box-shadow: 0 6px 20px rgba(79,108,148,0.07) !important;
+  outline: none !important;
+}
+
+/* mapear botões usados no AtualizarItem para os estilos do tema */
+.criar-usuario-darkroot .btn-save,
+.criar-usuario-darkroot .btn-delete,
+.criar-usuario-darkroot .edit-actions .btn {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+}
+
+/* botão salvar = estilo principal dourado */
+.criar-usuario-darkroot .btn-save,
+.criar-usuario-darkroot button.btn-save,
+.criar-usuario-darkroot .item-form-wrap .btn-save {
+  background: linear-gradient(135deg, #d4af37, #a37e1f) !important;
+  border: none !important;
+  color: #111 !important;
+  box-shadow: 0 8px 30px rgba(124,92,255,0.12) !important;
+}
+
+/* botão excluir = outline leve */
+.criar-usuario-darkroot .btn-delete,
+.criar-usuario-darkroot button.btn-delete {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  color: rgba(233,238,248,0.95) !important;
+}
+
+/* mensagens (Toast/Alert) dentro do wrapper */
+.criar-usuario-darkroot .item-form-wrap .alert,
+.criar-usuario-darkroot .item-form-wrap .toast {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  color: #e9eef8 !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  border-radius: 10px !important;
+}
+
+/* garantir responsividade e padding reduzido em mobile */
+@media (max-width: 640px) {
+  .criar-usuario-darkroot .item-form-wrap { padding: 1rem !important; border-radius: 12px !important; }
+  .criar-usuario-darkroot .image-preview { width: 88px !important; height: 88px !important; }
+  .criar-usuario-darkroot .btn-save, .criar-usuario-darkroot .btn-delete { width: 100% !important; }
+}
+
+/* proteção extra: se algo ainda for sobrescrito, aumenta especificidade */
+div.criar-usuario-darkroot div.item-form-wrap input.form-control {
+  background: rgba(255,255,255,0.03) !important;
+  color: #e9eef8 !important;
+}
+
+/* === Decorative background dots for AtualizarItem (compatível com Login.css) ===
+   Cole depois do Login.css / CriarUsuario.css (ou no mesmo arquivo) */
+.editar-item-darkroot { position: relative; overflow: hidden; z-index: 0; }
+
+/* Reaproveita a classe .bg-decor, mas com maior especificidade para esta tela */
+.editar-item-darkroot .bg-decor,
+.criar-usuario-darkroot .bg-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* atrás do conteúdo (item-form-wrap tem z-index: 5 normalmente) */
+}
+
+/* base dot style */
+.editar-item-darkroot .bg-decor .dot,
+.criar-usuario-darkroot .bg-decor .dot {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  filter: blur(36px);
+  opacity: 0.12;
+  transform: translateZ(0);
+  pointer-events: none;
+}
+
+/* dot variants (ajustadas para tela de edição) */
+.editar-item-darkroot .bg-decor .dot-1,
+.criar-usuario-darkroot .bg-decor .dot-1 {
+  width: 320px;
+  height: 320px;
+  left: -100px;
+  top: -60px;
+  background: radial-gradient(circle at 30% 30%, rgba(124, 92, 255, 0.9), rgba(59, 130, 246, 0.38));
+}
+
+.editar-item-darkroot .bg-decor .dot-2,
+.criar-usuario-darkroot .bg-decor .dot-2 {
+  width: 240px;
+  height: 240px;
+  right: -60px;
+  bottom: -50px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 115, 115, 0.75), rgba(255, 183, 77, 0.18));
+}
+
+/* optional third dot */
+.editar-item-darkroot .bg-decor .dot-3,
+.criar-usuario-darkroot .bg-decor .dot-3 {
+  width: 160px;
+  height: 160px;
+  left: 38%;
+  bottom: -80px;
+  background: radial-gradient(circle at 60% 60%, rgba(56, 189, 248, 0.72), rgba(34, 197, 94, 0.10));
+}
+
+/* garantir que o card fique acima dos dots */
+.editar-item-darkroot .item-form-wrap,
+.criar-usuario-darkroot .item-form-wrap {
+  position: relative;
+  z-index: 5;
+}
+
+/* responsividade - reduzir tamanho/posição em telas pequenas */
+@media (max-width: 768px) {
+  .editar-item-darkroot .bg-decor .dot-1 { width: 220px; height: 220px; left: -70px; top: -40px; opacity: 0.10; }
+  .editar-item-darkroot .bg-decor .dot-2 { width: 160px; height: 160px; right: -40px; bottom: -40px; opacity: 0.10; }
+  .editar-item-darkroot .bg-decor .dot-3 { display: none; } /* esconde o terceiro dot em telas pequenas */
+}
+
+/* telas muito pequenas */
+@media (max-width: 420px) {
+  .editar-item-darkroot .bg-decor .dot-1 { width: 160px; height: 160px; left: -40px; top: -30px; }
+  .editar-item-darkroot .bg-decor .dot-2 { width: 120px; height: 120px; right: -20px; bottom: -30px; }
+}
+

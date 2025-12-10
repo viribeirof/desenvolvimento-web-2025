@@ -132,7 +132,6 @@ public class ItemController {
             return ResponseEntity.notFound().build();
         }
 
-        // Se estiver guardando base64:
         byte[] bytes = Base64.getDecoder().decode(item.getFotoItem());
         String contentType = item.getFotoItemContentType() != null ? item.getFotoItemContentType() : "image/jpeg";
 

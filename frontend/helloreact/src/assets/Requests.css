@@ -1,0 +1,125 @@
+/* Container geral */
+.requests-container {
+  background-color: #0b1220;
+  padding: 1rem;
+  border-radius: 12px;
+  color: #e9eef8;
+  min-height: 70vh;
+  transition: background 0.3s ease;
+}
+
+/* Título da seção */
+.section-title {
+  color: #e9eef8;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Lista de solicitações */
+.request-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Item da lista */
+.request-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover efeito sutil */
+.shadow-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+}
+
+/* Título do item */
+.item-title {
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* Mensagem */
+.item-message {
+  color: rgba(233, 238, 248, 0.8);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Metadata */
+.item-meta {
+  font-size: 0.85rem;
+  color: rgba(233, 238, 248, 0.65);
+}
+
+/* Badge de status */
+.status-badge {
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.status-badge:hover {
+  background-color: #6366f1;
+}
+
+/* Mensagem de lista vazia */
+.empty-text {
+  color: rgba(233, 238, 248, 0.5);
+  font-style: italic;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Animação fade-in */
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Status Aceita - azul/verde */
+.status-aceita {
+  background-color: #16a34a !important; /* verde */
+  color: #ffffff;
+}
+
+/* Status Pendente - amarelo/dourado */
+.status-pendente {
+  background-color: #facc15 !important; /* amarelo */
+  color: #000000;
+}
+
+/* Status Recusada - vermelho */
+.status-recusada {
+  background-color: #dc2626 !important; /* vermelho */
+  color: #ffffff;
+}
+
+/* Mantém borda arredondada e padding padrão */
+.status-badge {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}

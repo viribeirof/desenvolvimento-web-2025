@@ -45,12 +45,6 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public String gerarETag(Page<UsuarioDto> page) throws JsonProcessingException {
-        String json = new ObjectMapper().writeValueAsString(page.getContent());
-        String hash = Integer.toHexString(json.hashCode());
-        return hash.replace("\"", "");
-    }
-
     @Transactional
     public void criarUsuario(UsuarioCreateDto dto) {
         String email = dto.getEmail() != null ? dto.getEmail().trim().toLowerCase() : null;

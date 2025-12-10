@@ -1,8 +1,10 @@
 package com.buddiebag.backend;
 
+import com.buddiebag.backend.service.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -38,8 +40,14 @@ public class JwtUtil {
     public String generateToken(String subject, UserDetails userDetails, long expirationMs) {
         Map<String, Object> claims = new HashMap<>();
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(a -> a.getAuthority()).collect(Collectors.toList());
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put("roles", roles);
+
+        // Pega o ID se for nosso CustomUserDetails
+        if (userDetails instanceof CustomUserDetails) {
+            Long id = ((CustomUserDetails) userDetails).getId();
+            claims.put("id", id);
+        }
 
         Date now = new Date();
         Date exp = new Date(now.getTime() + expirationMs);

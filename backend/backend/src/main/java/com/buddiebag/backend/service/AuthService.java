@@ -36,5 +36,4 @@ public class AuthService {
         return uds.loadUserByUsername(email);
     }
 
-
 }

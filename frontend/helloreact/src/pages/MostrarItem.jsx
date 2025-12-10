@@ -18,8 +18,16 @@ const MostrarItem = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [owner, setOwner] = useState({ nome: "", email: "", id: null, fotoSrc: null });
+
   const imgObjectUrlRef = useRef(null);
   const imgAbortRef = useRef(null);
+
+  const ownerObjectUrlRef = useRef(null);
+  const ownerAbortRef = useRef(null);
+
+  const mainAbortRef = useRef(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     if (!user || !id) {
@@ -29,11 +37,14 @@ const MostrarItem = () => {
     }
 
     let mounted = true;
+    mountedRef.current = true;
     const controller = new AbortController();
+    mainAbortRef.current = controller;
 
     const fetchItem = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const res = await authFetch(`http://localhost:8080/api/itens/${id}`, {
           method: "GET",
@@ -42,23 +53,24 @@ const MostrarItem = () => {
 
         if (!res.ok) {
           const errorText = await res.text().catch(() => `Erro HTTP ${res.status}`);
-          navigate("/login", { replace: true });
+          if (res.status === 401 || res.status === 403) {
+            navigate("/login", { replace: true });
+          }
           throw new Error(`Falha ao carregar item ${id}: ${errorText}`);
         }
 
-        if (!mounted) return;
+        if (!mountedRef.current) return;
         const data = await res.json();
         setItem(data);
+        setError(null);
       } catch (err) {
-        if (err?.name === "AbortError") {
-          return;
-        }
+        if (err?.name === "AbortError") return;
         console.error("Erro ao buscar item:", err);
-        if (!mounted) return;
+        if (!mountedRef.current) return;
         setError("Não foi possível carregar os detalhes do item. Tente novamente mais tarde.");
         setItem(null);
       } finally {
-        if (mounted) setLoading(false);
+        if (mountedRef.current) setLoading(false);
       }
     };
 
@@ -66,9 +78,11 @@ const MostrarItem = () => {
 
     return () => {
       mounted = false;
-      controller.abort();
+      mountedRef.current = false;
+      try { controller.abort(); } catch { }
+      mainAbortRef.current = null;
     };
-  }, [user, authFetch, id, navigate]);
+  }, [user, id, authFetch, navigate]);
 
   useEffect(() => {
     if (imgObjectUrlRef.current) {
@@ -86,7 +100,7 @@ const MostrarItem = () => {
     }
 
     if (!item.fotoItem) {
-      setFotoCache("/placeholder.png");
+      setFotoCache(item.fotoSrc ?? "/placeholder.png");
       return;
     }
 
@@ -96,7 +110,6 @@ const MostrarItem = () => {
     const carregar = async () => {
       try {
         const result = await fetchImageWithToken(item.fotoItem, { signal: ac.signal });
-
         if (!result) {
           setFotoCache("/placeholder.png");
           return;
@@ -124,9 +137,7 @@ const MostrarItem = () => {
 
         setFotoCache("/placeholder.png");
       } catch (err) {
-        if (err?.name === "AbortError") {
-          return;
-        }
+        if (err?.name === "AbortError") return;
         console.warn("Erro ao carregar imagem do item:", err);
         setFotoCache("/placeholder.png");
       } finally {
@@ -148,11 +159,100 @@ const MostrarItem = () => {
     };
   }, [item]);
 
+  useEffect(() => {
+    if (ownerObjectUrlRef.current) {
+      try { URL.revokeObjectURL(ownerObjectUrlRef.current); } catch { }
+      ownerObjectUrlRef.current = null;
+    }
+    if (ownerAbortRef.current) {
+      try { ownerAbortRef.current.abort(); } catch { }
+      ownerAbortRef.current = null;
+    }
+    if (!item || !item.usuarioId) {
+      setOwner({ nome: item?.nomeUsuario ?? "", email: item?.userEmail ?? "", id: item?.usuarioId ?? null, fotoSrc: null });
+      return;
+    }
+
+    const ac = new AbortController();
+    ownerAbortRef.current = ac;
+
+    const carregarOwner = async () => {
+      try {
+        const res = await authFetch(`http://localhost:8080/api/usuarios/${encodeURIComponent(item.usuarioId)}`, {
+          method: "GET",
+          signal: ac.signal,
+        });
+
+        if (!res.ok) {
+          setOwner({
+            nome: item.nomeUsuario ?? "",
+            email: item.userEmail ?? "",
+            id: item.usuarioId ?? null,
+            fotoSrc: null
+          });
+          return;
+        }
+
+        const userData = await res.json();
+
+        const ownerInfo = {
+          nome: userData.nome ?? item.nomeUsuario ?? "",
+          email: userData.email ?? item.userEmail ?? "",
+          id: userData.id ?? item.usuarioId ?? null,
+          fotoSrc: null
+        };
+
+        const possibleRefs = [
+          userData.fotoPerfil,
+          item.fotoPerfil
+        ].filter(Boolean);
+
+        let assignedFoto = null;
+
+        for (const ref of possibleRefs) {
+          if (typeof ref === "string" && (ref.startsWith("http") || ref.startsWith("data:") || ref.startsWith("blob:"))) {
+            assignedFoto = ref;
+            break;
+          }
+        }
+
+        if (assignedFoto) {
+          ownerInfo.fotoSrc = assignedFoto;
+          setOwner(ownerInfo);
+          return;
+        }
+        setOwner(ownerInfo);
+      } catch (err) {
+        if (err?.name === "AbortError") return;
+        console.warn("Erro ao carregar dados do proprietário:", err);
+        setOwner({
+          nome: item.nomeUsuario ?? "",
+          email: item.userEmail ?? "",
+          id: item.usuarioId ?? null,
+          fotoSrc: null
+        });
+      } finally {
+        if (ownerAbortRef.current === ac) ownerAbortRef.current = null;
+      }
+    };
+
+    carregarOwner();
+
+    return () => {
+      if (ownerAbortRef.current) {
+        try { ownerAbortRef.current.abort(); } catch { }
+        ownerAbortRef.current = null;
+      }
+      if (ownerObjectUrlRef.current) {
+        try { URL.revokeObjectURL(ownerObjectUrlRef.current); } catch { }
+        ownerObjectUrlRef.current = null;
+      }
+    };
+  }, [item, authFetch]);
+
   const handleEdit = () => navigate(`/item/editar/${id}`);
 
   if (authLoading) return null;
-
-  console.log(item);
 
   return (
     <>
@@ -164,7 +264,9 @@ const MostrarItem = () => {
         fotoCache={fotoCache}
         loading={loading}
         error={error}
+        setError={setError}
         onEdit={handleEdit}
+        ownerInfo={owner}
       />
     </>
   );

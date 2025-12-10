@@ -44,7 +44,7 @@ public class RequestController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> respond(@PathVariable Long id, @RequestBody Map<String,String> body, Authentication auth){
         Usuario user = usuarioRepo.findByEmail(auth.getName())  .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        String action = body.get("action"); // "ACEITA" or "RECUSA"
+        String action = body.get("action");
         RequestStatus st = "ACEITA".equalsIgnoreCase(action) ? RequestStatus.ACEITA : RequestStatus.RECUSADA;
         Request updated = svc.respond(user.getId(), id, st);
         return ResponseEntity.ok(updated);

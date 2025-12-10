@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthFetch } from "../../auth/useAuthFetch";
+import "../../assets/RequestModel.css"
 
 const RequestModal = ({ show, onClose, item, user, onRequestSuccess }) => {
   const authFetch = useAuthFetch();
@@ -63,57 +64,39 @@ const RequestModal = ({ show, onClose, item, user, onRequestSuccess }) => {
   };
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1050 }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content rounded-lg shadow-lg border-0">
-          <div className="modal-header border-bottom-0">
-            <h5 className="modal-title fw-bold text-primary">Solicitar Troca: {item.nome}</h5>
-            <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
-          </div>
-          <div className="modal-body">
-            {modalError && (
-              <div className="alert alert-danger p-2 text-sm" role="alert">
-                {modalError}
-              </div>
-            )}
-            {successMessage && (
-              <div className="alert alert-success p-2 text-sm" role="alert">
-                {successMessage}
-              </div>
-            )}
-            <p className="text-muted mb-3">
-              Envie uma mensagem opcional para o proprietário do item ({item.usuarioId}).
-            </p>
-            <div className="form-group">
-              <textarea
-                id="requestMessage"
-                className="form-control"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                placeholder="Olá! Tenho interesse em trocar por este item..."
-                rows="4"
-                disabled={loading}
-              />
-            </div>
-          </div>
-          <div className="modal-footer border-top-0 d-flex justify-content-between">
-            <button className="btn btn-secondary" onClick={handleClose} disabled={loading}>Cancelar</button>
-            <button
-              className="btn btn-primary"
-              onClick={handleSend}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Enviando...
-                </>
-              ) : 'Enviar Solicitação'}
-            </button>
-          </div>
-        </div>
-      </div>
+<div className="request-modal-overlay">
+  <div className="request-modal-content">
+    <div className="request-modal-header">
+      <h5>Solicitar Troca: {item.nome}</h5>
+      <button type="button" className="btn-close" onClick={handleClose}></button>
     </div>
+    <div className="request-modal-body">
+      {modalError && <div className="alert alert-danger">{modalError}</div>}
+      {successMessage && <div className="alert alert-success">{successMessage}</div>}
+      <p>Faça a sua oferta!</p>
+      <textarea
+        className="form-control"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Olá! Tenho interesse em trocar por este item..."
+        rows={4}
+        disabled={loading}
+      />
+    </div>
+    <div className="request-modal-footer">
+      <button className="btn btn-secondary" onClick={handleClose} disabled={loading}>Cancelar</button>
+      <button className="btn btn-primary" onClick={handleSend} disabled={loading}>
+        {loading ? (
+          <>
+            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Enviando...
+          </>
+        ) : 'Enviar Solicitação'}
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 };
 
