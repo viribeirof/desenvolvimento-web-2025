@@ -15,23 +15,19 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 
 **Decisores/Apoiadores:**  
 - Comunidade acadêmica.  
-- Professores da disciplina (avaliação).  
+- Professores da disciplina.  
 
 ---
 
 ## 3) Casos de uso (de forma simples)  
 - **Todos:** Logar/deslogar do sistema; Manter dados cadastrais.  
-- **Doadores:** Manter (inserir, mostrar, editar, remover) seus itens cadastrados.  
+- **Doadores:** Manter (inserir, mostrar, editar, indisponibilizar) seus itens cadastrados.  
 - **Receptores:** Pesquisar e visualizar itens disponíveis; manifestar interesse em um item.  
-- **Administrador:** Gerenciar todos os usuários e itens (edição/remoção).  
-
 ---
 
 ## 4) Limites e suposições  
 
 - **Limites:**  
-  - O sistema será desenvolvido como parte da disciplina, com entrega final até **2025-11-30**.  
-  - Funcionalidades mínimas: CRUD de itens e usuários, autenticação/login e gerenciamento básico.  
   - Deploy acadêmico, sem preocupação com alta disponibilidade ou escalabilidade.  
 
 - **Suposições:**  
@@ -42,11 +38,10 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
   - Será possível usar dispositivos pessoais ou laboratórios da universidade para rodar o sistema.  
 
 - **Plano B:**  
-  - Sem internet → rodar localmente (Angular em modo dev + Spring Boot + MySQL local).  
+  - Sem internet → rodar localmente (React em modo dev + Spring Boot + MySQL local).  
   - Se o **MySQL Workbench** não estiver disponível → acesso ao banco via **phpMyAdmin**.  
-  - Caso falte tempo do professor → simulação rápida com **3 usuários e 2 itens cadastrados**.  
-
-
+  - Caso falte tempo do professor → simulação rápida com **3 usuários e 2 itens cadastrados**.
+  - 
 ---
 
 ## 5) Hipóteses + validação  
@@ -60,28 +55,18 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 
 ## 6) Fluxo principal e primeira fatia  
 
-**Fluxo principal:**  
-0) Usuário cria a conta  
-1) Usuário faz login  
-2) Usuário acessa a lista de itens disponíveis  
-3) Usuário (doador) clica em "Cadastrar item" e preenche os dados  
-4) Usuário salva o item e o sistema registra no banco (**PostgreSQL**)  
-5) Item aparece automaticamente na lista de desapegos  
-6) Outro usuário (receptor) pesquisa e visualiza o item  
-7) Usuário (receptor) manifesta interesse no item  
-8) Administrador faz login  
-9) Administrador pode editar ou remover itens/usuários se necessário  
+**Fluxo de login**  
 
----
+<img width="1380" height="744" alt="Captura de tela 2025-12-08 142406" src="https://github.com/user-attachments/assets/77e91999-4c34-4e6b-b4bb-c089be286634" />
 
-**Primeira fatia vertical (escopo mínimo):**  
-- Criar conta e login simples  
-- Cadastrar item  
-- Listar itens  
+
+**Fluxo de troca de itens:**  
+<img width="1326" height="760" alt="Captura de tela 2025-12-08 143046" src="https://github.com/user-attachments/assets/6362e211-2d83-47b2-8417-00fd4ff0465b" />
+
 
 **Critérios de aceite:**  
-- Ao cadastrar um item válido, ele aparece na lista de desapegos.  
-- Ao excluir um item, ele desaparece da lista.  
+- Ao cadastrar um item válido, ele aparece na lista de itens principal.  
+- Ao indisponibilizar um item, não é mais possível editá-lo. 
 - Apenas usuários logados podem cadastrar ou interagir com itens.  
 
 
@@ -98,7 +83,7 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 - **Armazenamento local:** uso eventual de localStorage/sessionStorage para autenticação.  
 
 ### 8.2 Front-end (servidor de aplicação)  
-- **Framework:** Angular (TypeScript).  
+- **Framework:** React.  
 - **Hospedagem:** GitHub Pages ou servidor local para testes.  
 
 ### 8.3 Back-end (API/servidor)  
@@ -135,7 +120,7 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 | nome            | texto       | sim         | "Cafeteira elétrica" |  
 | descricao       | texto       | sim         | "Funciona bem, usada poucas vezes" |  
 | status          | texto (enum: disponível, reservado, doado) | sim | "disponível" |  
-| fotoPItem       | texto/url   | não          | cafeteiraria.png   |  
+| fotoItem        | texto/url   | não          | cafeteiraria.png   |  
 | dataCriacao     | data/hora   | sim         | 2025-08-21 14:40   |  
 | dataAtualizacao | data/hora   | sim         | 2025-08-21 14:50   |  
 
@@ -202,16 +187,35 @@ Ou, se estiver usando **IntelliJ IDEA**, basta clicar no botão **▶ Play** no 
 
 ### 11) Endpoints da API
 
-| Método | Rota                   | Body (JSON) | Resposta (HTTP + Exemplo) |
-|--------|------------------------|-------------|---------------------------|
-| GET    | /api/usuarios          | -           | 200 OK <br> `[{<"id":1,"nome":"Maria Silva","email":"maria@email.com","fotoPerfil":"maria.png"}]` |
-| GET    | /api/usuarios/{id}     | -           | 200 OK <br> `{"id":1,"nome":"Maria Silva","email":"maria@email.com","fotoPerfil":"maria.png"}` <br> 404 Not Found |
-| POST   | /api/usuarios          | `{"nome":"Ana Souza","email":"ana@email.com","senhaHash":"12345678","fotoPerfil":"ana.png"}` | 201 Created <br> `{"message":"Usuário criado com sucesso!","id":3}`<br> <br> 500 Internal Server Error (email duplicado) <br> `{"message":"Item excluído com sucesso!"}` |
-| PUT    | /api/usuarios/{id}     | `{"nome":"Ana Souza","email":"ana@email.com","senhaHash":"nova123","fotoPerfil":"ana.png"}` | 200 OK <br> `{"message":"Usuário atualizado com sucesso!"}` <br> 404 Not Found <br>  |
-| DELETE | /api/usuarios/{id}     | -           | 200 OK <br> `{"message":"Usuário excluído com sucesso!"}`<br> <br> 404 Not Found |
-| GET    | /api/itens             | -           | 200 OK <br> `[{"id":10,"nome":"Cafeteira elétrica","descricao":"Funciona bem, usada poucas vezes","status":"disponível","fotoItem":"cafeteira.png","usuarioId":1}]` |
-| POST   | /api/itens             | `{"nome":"Cafeteira elétrica","descricao":"Funciona bem, usada poucas vezes","usuarioId":1,"fotoItem":"cafeteira.png"}` | 201 Created <br> `{"message":"Item criado com sucesso!","id":10}` |
-| PUT    | /api/itens/{id}        | `{"nome":"Cafeteira nova","descricao":"Usada 1 vez","status":"disponível","fotoItem":"cafeteira_nova.png"}` | 200 OK <br> `{"message":"Item atualizado com sucesso!"}` <br> 404 Not Found |
-| DELETE | /api/itens/{id}        | -           | 200 OK <br> `{"message":"Item excluído com sucesso!"}` <br> 404 Not Found |
+## 📦 Rotas — Itens
+
+| Método | Rota | Consome | Descrição / Observações |
+|--------|------|---------|-------------------------|
+| GET    | `/api/itens` | — | Listar todos os itens (suporta ETag / 304 Not Modified). |
+| GET    | `/api/itens/{id}` | — | Buscar item por ID. |
+| POST   | `/api/itens` | `multipart/form-data` | Criar item. Campos: `nome`, `descricao`, `status`, `imagem` (opcional). Requer autenticação (email vem de `authentication.getName()`). Retorna **201 Created** com `ItemDto`. |
+| PUT    | `/api/itens/{id}` | `multipart/form-data` | Atualizar item. Campos: `nome`, `descricao`, `status` (opcional), `imagem` (opcional). Retorna **200 OK** ou **404**. |
+| GET    | `/api/itens/usuario/{usuarioId}` | — | Lista todos os itens pertencentes ao usuário. |
+| GET    | `/api/itens/{id}/foto` | — | Retorna os bytes da foto do item (base64 decodificado). Pode retornar `404` se não houver foto. |
+
+## 👤 Rotas — Usuário
+
+| Método | Rota | Consome | Descrição |
+|--------|------|---------|-----------|
+| POST   | `/api/usuarios` | `multipart/form-data` | Criar usuário com imagem opcional. |
+| POST   | `/api/usuarios/login` | JSON | Login. Retorna tokens + dados do usuário. |
+| GET    | `/api/usuarios/{id}` | — | Buscar usuário por ID. |
+| GET    | `/api/usuarios/email/{email}` | — | Buscar usuário por email. |
+| PUT    | `/api/usuarios/{id}` | `multipart/form-data` | Editar conta do usuário. |
+| GET    | `/api/usuarios/{id}/foto` | — | Retorna foto do usuário armazenada como base64. |
+
+## 🔁 Rotas — Solicitações
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST   | `/api/requests` | Criar solicitação de empréstimo ou troca. |
+| GET    | `/api/requests` | Listar solicitações do usuário autenticado. |
+| GET    | `/api/requests/{id}` | Buscar solicitação por ID. |
+| PUT    | `/api/requests/{id}/status` | Atualizar status: aprovar, recusar, cancelar, concluir. |
 
 
