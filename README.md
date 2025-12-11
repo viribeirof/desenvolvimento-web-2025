@@ -54,9 +54,11 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 
 
 ## 6) Fluxo principal e primeira fatia  
+**Diagrama de contexto**
+<img width="1056" height="78" alt="image" src="https://github.com/user-attachments/assets/3993388b-5def-4d64-b236-35dbbe33db4f" />
+
 
 **Fluxo de login**  
-
 <img width="1380" height="744" alt="Captura de tela 2025-12-08 142406" src="https://github.com/user-attachments/assets/77e91999-4c34-4e6b-b4bb-c089be286634" />
 
 
