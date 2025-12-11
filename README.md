@@ -54,7 +54,6 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 
 
 ## 6) Fluxo principal e primeira fatia  
-**Diagrama de contexto**
 <img width="1056" height="78" alt="image" src="https://github.com/user-attachments/assets/3993388b-5def-4d64-b236-35dbbe33db4f" />
 
 
