@@ -128,6 +128,10 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 - Um **Usuário** tem muitos **Itens** (1→N).  
 - Um **Item** pertence a um **Usuário** (N→1).
 
+### 9.4 Diagrama EDR
+<img width="733" height="445" alt="image" src="https://github.com/user-attachments/assets/79002e06-9275-4c7f-8920-1753922621a8" />
+
+
 ## 10) Como rodar o projeto
 
 ### 10.1 Back-end (Spring Boot)
