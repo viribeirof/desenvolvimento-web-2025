@@ -97,7 +97,8 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 9.1 Entidades  
 - **Usuario** — pessoa que usa o sistema (doador/receptor).  
-- **Item** — objeto cadastrado para doação ou troca.  
+- **Item** — objeto cadastrado para doação ou troca.
+- **Requests** — solicitações para itens.   
 
 ### 9.2 Campos por entidade  
 
