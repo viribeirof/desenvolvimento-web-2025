@@ -49,7 +49,7 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 - **H-Valor:** Se os alunos conseguirem cadastrar itens e encontrar rapidamente o que procuram, então o sistema será útil e incentivará o compartilhamento.  
   - *Validação (valor):* teste piloto com 5 colegas da universidade; sucesso se ≥4 conseguirem cadastrar e localizar pelo menos 1 item em até **3 minutos**, sem ajuda externa.  
 
-- **H-Viabilidade:** Com a aplicação web (Spring Boot + Angular + MySQL), cadastrar e listar itens deve ser rápido e estável.  
+- **H-Viabilidade:** Com a aplicação web (Spring Boot + React + MySQL), cadastrar e listar itens deve ser rápido e estável.  
   - *Validação (viabilidade):* executar **20 operações de cadastro/listagem** no protótipo; sucesso se ≥18 operações ocorrerem em ≤3 segundos cada.  
 
 
@@ -81,7 +81,7 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 8.1 Navegador  
 - **Compatibilidade:** navegadores modernos (Chrome, Firefox, Edge).  
-- **Renderização:** HTML5, CSS3, JavaScript (gerado pelo Angular).  
+- **Renderização:** HTML5, CSS3, JavaScript (React).  
 - **Armazenamento local:** uso eventual de localStorage/sessionStorage para autenticação.  
 
 ### 8.2 Front-end (servidor de aplicação)  
