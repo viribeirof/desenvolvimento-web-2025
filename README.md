@@ -49,14 +49,15 @@ No início, o foco será **estudantes universitários** com o objetivo de **faci
 - **H-Valor:** Se os alunos conseguirem cadastrar itens e encontrar rapidamente o que procuram, então o sistema será útil e incentivará o compartilhamento.  
   - *Validação (valor):* teste piloto com 5 colegas da universidade; sucesso se ≥4 conseguirem cadastrar e localizar pelo menos 1 item em até **3 minutos**, sem ajuda externa.  
 
-- **H-Viabilidade:** Com a aplicação web (Spring Boot + Angular + MySQL), cadastrar e listar itens deve ser rápido e estável.  
+- **H-Viabilidade:** Com a aplicação web (Spring Boot + React + MySQL), cadastrar e listar itens deve ser rápido e estável.  
   - *Validação (viabilidade):* executar **20 operações de cadastro/listagem** no protótipo; sucesso se ≥18 operações ocorrerem em ≤3 segundos cada.  
 
 
 ## 6) Fluxo principal e primeira fatia  
+<img width="1056" height="78" alt="image" src="https://github.com/user-attachments/assets/3993388b-5def-4d64-b236-35dbbe33db4f" />
+
 
 **Fluxo de login**  
-
 <img width="1380" height="744" alt="Captura de tela 2025-12-08 142406" src="https://github.com/user-attachments/assets/77e91999-4c34-4e6b-b4bb-c089be286634" />
 
 
@@ -79,7 +80,7 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 8.1 Navegador  
 - **Compatibilidade:** navegadores modernos (Chrome, Firefox, Edge).  
-- **Renderização:** HTML5, CSS3, JavaScript (gerado pelo Angular).  
+- **Renderização:** HTML5, CSS3, JavaScript (React).  
 - **Armazenamento local:** uso eventual de localStorage/sessionStorage para autenticação.  
 
 ### 8.2 Front-end (servidor de aplicação)  
@@ -96,7 +97,8 @@ O protótipo completo pode ser acessado no Figma: [Acessar no Figma](https://www
 
 ### 9.1 Entidades  
 - **Usuario** — pessoa que usa o sistema (doador/receptor).  
-- **Item** — objeto cadastrado para doação ou troca.  
+- **Item** — objeto cadastrado para doação ou troca.
+- **Requests** — solicitações para itens.   
 
 ### 9.2 Campos por entidade  
 
