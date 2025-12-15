@@ -86,7 +86,6 @@ public class SecurityConfig {
                         ))
                 );
 
-        // adicione seus filtros (ex.: jwtAuthFilter) antes de retornar se necessário
          http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -100,8 +99,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        config.setExposedHeaders(List.of("ETag", "Location")); // se precisar
-        config.setAllowCredentials(true); // se usar cookies (refresh)
+        config.setExposedHeaders(List.of("ETag", "Location"));
+        config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

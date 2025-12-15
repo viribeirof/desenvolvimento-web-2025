@@ -43,7 +43,6 @@ public class JwtUtil {
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put("roles", roles);
 
-        // Pega o ID se for nosso CustomUserDetails
         if (userDetails instanceof CustomUserDetails) {
             Long id = ((CustomUserDetails) userDetails).getId();
             claims.put("id", id);
@@ -61,7 +60,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Extra: valida qualquer token (access ou refresh)
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);

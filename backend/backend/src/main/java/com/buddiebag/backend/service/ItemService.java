@@ -47,7 +47,7 @@ public class ItemService {
         return ItemMapper.toDto(item);
     }
 
-
+    //recebe multi/form-data
     public ItemDto criarItem(String nome, String descricao, String status, Long usuarioId, MultipartFile imagem) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));

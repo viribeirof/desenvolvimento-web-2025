@@ -41,7 +41,7 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<List<ItemDto>> listar(HttpServletRequest request) throws JsonProcessingException {
-        List<ItemDto> lista = itemService.listarTodos();
+            List<ItemDto> lista = itemService.listarTodos();
 
         String json = objectMapper.writeValueAsString(lista);
         String eTag = Integer.toHexString(json.hashCode());
@@ -70,7 +70,7 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<ItemDto> buscarPorId(@PathVariable Long id) {
         try {
-                    ItemDto item = itemService.buscarPorId(id);
+            ItemDto item = itemService.buscarPorId(id);
             return ResponseEntity.ok(item);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -86,7 +86,7 @@ public class ItemController {
             @RequestParam(value = "imagem", required = false) MultipartFile imagem,
             Authentication authentication
     ) {
-        String email = authentication.getName(); // o JWT deve ter o email como "principal"
+        String email = authentication.getName();
         System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

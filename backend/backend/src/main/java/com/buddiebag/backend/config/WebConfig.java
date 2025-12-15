@@ -33,5 +33,27 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .exposedHeaders("ETag")
                 .allowCredentials(true);
+
+        registry.addMapping("/uploads/**")
+                .allowedOrigins("https://buddiebag.vercel.app")
+                .allowedMethods("GET", "HEAD", "OPTIONS")
+                .allowCredentials(false);
+
+        registry.addMapping("/api/**")
+                .allowedOrigins("https://buddiebag.vercel.app")
+                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("ETag")
+                .allowCredentials(true);
+
+        registry.addMapping("/auth/**")
+                .allowedOrigins("https://buddiebag.vercel.app")
+                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("ETag")
+                .allowCredentials(true);
     }
+
+
+
 }

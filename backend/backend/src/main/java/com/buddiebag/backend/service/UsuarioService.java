@@ -46,6 +46,7 @@ public class UsuarioService {
     }
 
     @Transactional
+    //recebe base64
     public void criarUsuario(UsuarioCreateDto dto) {
         String email = dto.getEmail() != null ? dto.getEmail().trim().toLowerCase() : null;
         String senha = dto.getSenha();
