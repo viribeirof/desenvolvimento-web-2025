@@ -18,7 +18,7 @@ public class FileStorageService {
     private final String baseUrl;
 
     public FileStorageService(
-            @Value("${app.upload.dir:/mnt/data/uploads}") String uploadDir,
+            @Value("${app.upload.dir:/tmp/uploads}") String uploadDir,
             @Value("${app.base-url:http://localhost:8080}") String baseUrl) {
 
 
