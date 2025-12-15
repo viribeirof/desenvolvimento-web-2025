@@ -18,8 +18,9 @@ public class FileStorageService {
     private final String baseUrl;
 
     public FileStorageService(
-            @Value("${app.upload.dir:${user.home}/uploads}") String uploadDir,
+            @Value("${app.upload.dir:/mnt/data/uploads}") String uploadDir,
             @Value("${app.base-url:http://localhost:8080}") String baseUrl) {
+
 
         this.uploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
         this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
