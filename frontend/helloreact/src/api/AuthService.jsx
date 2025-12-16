@@ -1,7 +1,6 @@
-// authService.login
-// authService.login
+import { API_BASE_URL } from "./api";
 export const login = async (email, senha) => {
-  const res = await fetch("http://localhost:8080/auth/login", {
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: 'include',
@@ -22,6 +21,6 @@ export const login = async (email, senha) => {
 
 
 export const logout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
+  sessionStorage.removeItem("accessToken");
+  sessionStorage.removeItem("refreshToken");
 };

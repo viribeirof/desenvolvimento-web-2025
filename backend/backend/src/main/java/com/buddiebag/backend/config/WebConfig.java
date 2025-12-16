@@ -21,39 +21,37 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // CORS para front-end
-        registry.addMapping("/uploads/**")
-                .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET", "HEAD", "OPTIONS")
-                .allowCredentials(false);
 
+        // Frontend local + produção
+        String[] allowedOrigins = {
+                "http://localhost:5173",
+                "https://buddiebag.vercel.app"
+        };
+
+        // API
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173")
+                .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("ETag")
                 .allowCredentials(true);
 
-        registry.addMapping("/uploads/**")
-                .allowedOrigins("https://buddiebag.vercel.app")
-                .allowedMethods("GET", "HEAD", "OPTIONS")
-                .allowCredentials(false);
-
-        registry.addMapping("/api/**")
-                .allowedOrigins("https://buddiebag.vercel.app")
-                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("ETag")
-                .allowCredentials(true);
-
+        // Auth
         registry.addMapping("/auth/**")
-                .allowedOrigins("https://buddiebag.vercel.app")
-                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("GET","POST","OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("ETag")
                 .allowCredentials(true);
+
+        // Uploads (imagens públicas)
+        registry.addMapping("/uploads/**")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("GET","HEAD","OPTIONS")
+                .allowCredentials(false);
+
+        // Health check
+        registry.addMapping("/funciona")
+                .allowedOrigins("*")
+                .allowedMethods("GET");
     }
-
-
-
 }
