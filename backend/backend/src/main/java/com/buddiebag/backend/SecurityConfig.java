@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/login","/auth/refresh", "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
@@ -76,11 +77,11 @@ public class SecurityConfig {
                         .referrerPolicy(ref -> ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
                                 "default-src 'self'; " +
-                                        "img-src 'self' data: blob: http://localhost:8080; " +
+                                        "img-src 'self' data: blob: https://buddiebag-backend.onrender.com http://localhost:8080; " +
                                         "script-src 'self'; " +
                                         "style-src 'self' 'unsafe-inline'; " +
                                         "font-src 'self' data:; " +
-                                        "connect-src 'self' http://localhost:8080; " +
+                                        "connect-src 'self' https://buddiebag-backend.onrender.com http://localhost:8080; " +
                                         "object-src 'none'; " +
                                         "frame-ancestors 'none';"
                         ))
@@ -96,13 +97,25 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://buddiebag.vercel.app"
+        ));
+
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+        ));
+
+        config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("ETag", "Location"));
         config.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
